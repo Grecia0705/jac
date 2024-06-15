@@ -1,0 +1,65 @@
+
+
+<div class="container">
+    <div class="row d-flex justify-content-between mb-2">
+        <span></span>
+        <div class="">
+            {{!-- <a href="/control" class="btn btn-primary">panel</a> --}}
+            <a href="/control/list/" class="btn btn-primary">lista</a>
+        </div>
+    </div>
+
+    <form method="post" action="/control/create" class="form col-12 col-lg-6 mx-auto card">
+        <div class="card-body">
+            <div class="form-group col-12">
+                <label for="t-date" class="">Fecha:</label>
+                <input id="t-date" type="date" name="date" class="form-control" required>
+            </div> 
+
+            <div class="form-group mb-4 col-12">
+                <label for="maquinaList">Máquina</label>
+                <select name="machineId" class="form-control" id="maquinaList">
+                    <option>selecciona una opción</option>
+                    {{#each machineList}}
+                        <option value="{{this.machineId}}">{{this.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <div class="form-group mb-4 col-12">
+                <label for="product">Producto</label>
+                <select name="productId" class="form-control" id="product">
+                    <option>selecciona una opción</option>
+                    {{#each productList}}
+                        <option value="{{this.productId}}">{{this.name}}</option>
+                    {{/each}}
+                </select>
+            </div> 
+
+            <div class="form-group mb-4 col-12">
+                <label for="exampleFormControlSelect1">Materia prima</label>
+                <select name="rawmatterId" class="form-control" id="exampleFormControlSelect1">
+                    <option>selecciona una opción</option>
+                    {{#each rawmatterList}}
+                        <option value="{{this.rawmatterId}}">{{this.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <div class="row col-12">
+                <div class="form-group col-6">
+                    <label for="t-kg" class="">Kg:</label>
+                    <input id="t-kg" type="number" name="kg" class="form-control" required />
+                </div>  
+                <div class="form-group col-6">
+                    <label for="t-gr" class="">Gr:</label>
+                    <input id="t-gr" type="number" name="gr" class="form-control" required />
+                </div>
+            </div>
+
+            <div class="col-12">
+                <input type="submit" class="btn btn-primary" value="Crear" />
+            </div>
+        </div>
+    </form>
+</div> 

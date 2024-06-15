@@ -1,0 +1,21 @@
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8 card px-0 mx-auto">
+            <div class="card-header">
+                <h5>fecha: <b>{{data.date}}</b></h5>
+                <h5>peso: <b>{{data.kg}}.{{data.gr}}</b></h5>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li>Creado el: <b>{{ data.create_at }}</b></li>
+                    <li>Actualizado el: <b>{{ data.update_at }}</b></li>
+                    <li>Creado por: <b>{{ data.createReference.username }} {{ data.createReference.email }}</b></li>
+                    <li>Máquina: <b>{{ data.machineReference.name }}</b></li>
+                    <li>Producto: <b>{{ data.productReference.name }}</b></li>
+                    <li>Materia prima: <b>{{ data.rawmatterReference.name }}</b></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

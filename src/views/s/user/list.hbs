@@ -1,0 +1,63 @@
+<link href="/assets/css/tables/table-basic.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/dashboard/dash_2.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/elements/custom-pagination.css" rel="stylesheet" type="text/css" />
+
+<div class="container">
+    <div class="row d-flex justify-content-between mb-2">
+        <span></span>
+        <div class="">
+            <a href="/users" class="btn btn-primary">panel</a>
+            <a href="/user/create" class="btn btn-primary">crear</a>
+        </div>
+    </div>
+    <div class="row">
+        {{#if list}}
+            <div class="table-responsive">
+                <table class="table table-hover table-light table-bordered mb-4">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Usuario</th>
+                            <th>Creado el</th>
+                            <th class="text-center">acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each list}}
+                            <tr>
+                                <td>{{this.name}} {{this.lastname}}</td>
+                                <td>{{this.username}}</td>
+                                <td>
+                                    {{#formatDate this.create_at}}
+                                        {{this}}
+                                    {{/formatDate}}
+                                </td>
+                                <td>
+                                    <a href="/user/{{this.userId}}/show" class="bi bi-eye-fill lead btn btn-primary">
+                                    </a>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-6">
+                <span class="h6">{{nowTotal}}</span>
+            </div>
+
+            <div class="paginating-container pagination-default col-6">
+                <ul class="pagination">
+                    {{#if nowPathOne}}
+                        <li class="prev"><a href="{{previousPath}}">anterior</a></li>
+                    {{/if}}
+                        <li class=""><span class="px-5">pagina actual {{nowPath}}</span></li>
+                    {{#if nowPathEnd}}
+                        <li class="next"><a href="{{nextPath}}">siguiente</a></li>
+                    {{/if}}
+                </ul>
+            </div>
+        {{else}}
+            <p class="text-muted lead">No hay usuario</p>
+        {{/if}}
+    </div>
+</div>

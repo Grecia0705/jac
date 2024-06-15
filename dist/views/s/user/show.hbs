@@ -1,0 +1,64 @@
+<link href="/assets/css/users/user-profile.css" rel="stylesheet" type="text/css" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-xl-4 col-lg-6 col-md-5 col-sm-12 layout-top-spacing">
+
+            <div class="user-profile layout-spacing">
+                <div class="widget-content widget-content-area">
+                    <div class="d-flex justify-content-between">
+                        <h3 class="">Perfil</h3>
+                        <span class="mt-2 edit-profile"></a>
+                    </div>
+                    <div class="text-center user-info">
+                        <p class="">{{data.name}} {{data.lastname}}</p>
+                    </div>
+                    <div class="user-info-list">
+                        <div class="">
+                            <ul class="contacts-block list-unstyled">
+                                <li class="contacts-block__item"> Usuario: <b>{{data.username}}</b> </li>
+                                <li class="contacts-block__item"> Correo: <b>{{data.email}}</b> </li>
+                            </ul>
+                        </div>                                    
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{!-- <div class="col-xl-8 col-lg-6 col-md-5 col-sm-12 layout-top-spacing">
+            <div class="card">
+                <form method="post" action="/user/create" class="form-row card-body">
+
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="t-name" class="">Nombre:</label>
+                        <input id="t-name" type="text" value="{{data.name}}" name="name" class="form-control" required>
+                    </div>  
+
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="t-lastname" class="">Apellido:</label>
+                        <input id="t-lastname" type="text" value="{{data.lastname}}" name="lastname" class="form-control" required>
+                    </div>  
+
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="t-email" class="">Correo:</label>
+                        <input id="t-email" type="email" value="{{data.email}}" name="email" class="form-control" required>
+                    </div>  
+
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="t-username" class="">Usuario:</label>
+                        <input id="t-username" type="text" value="{{data.username}}" name="username" class="form-control" required>
+                    </div>  
+
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="t-password" class="">Contraseña:</label>
+                        <input id="t-password" type="password" name="password" class="form-control" required>
+                    </div> 
+
+                    <div class="col-12">
+                        <input type="submit" class="btn btn-primary" value="Crear" />
+                    </div>
+                </form>
+            </div>
+        </div> --}}
+    </div>
+</div>

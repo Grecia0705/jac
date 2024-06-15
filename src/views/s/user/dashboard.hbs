@@ -1,0 +1,50 @@
+
+<link href="/assets/css/dashboard/dash_1.css" rel="stylesheet" type="text/css" />
+
+<div class="container">
+    <div class="row mt-3">
+        {{!-- <div class="col-xl-5 col-lg-6 col-md-12 col-sm-12 col-12 layout-spacing">
+            <div class="widget widget-chart-two">
+                <div class="widget-heading">
+                    <h5 class="">Gráfica: Usuarios</h5>
+
+                    <div class="row" id="form-for-yea">
+                        <input type="number" id="input-limit-users" value="5" class="form-control  basic col-8" />
+                        <button class="col-4 btn btn-primary" id="btn-limit-user">buscar</button>
+                    </div>
+                </div>
+                <div class="widget-content">
+                    <div id="chart-2" class=""></div>
+                </div>
+            </div>
+        </div> --}}
+            <div class="col-xl-7 col-lg-6 col-12 layout-spacing container">
+                <div class="row">
+                    <div class="card col-6">
+                        <div class="card-body row">
+                            <div class="m-auto col-6">
+                                <i class="bi bi-person-fill" style="font-size: 30px;">{{count}}</i>
+                            </div>
+                            <div class="m-auto col-6">
+                                <a href="/user/list" class="btn btn-primary"><b>Lista de usuarios</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card col-6">
+                        <div class="card-body row">
+                            <div class="m-auto col-4">
+                                <i class="bi bi-person-plus-fill" style="font-size: 30px ;border-radius: 50%;"></i>
+                            </div>
+                            <div class="m-auto col-8 d-grid">
+                                <a href="/user/create" class="btn btn-primary"><b>Crear usuario</b></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div> 
+</div> 
+
+<script src="/plugins/apex/apexcharts.min.js"></script>
+<script src="/js/userStatitics.js"></script>

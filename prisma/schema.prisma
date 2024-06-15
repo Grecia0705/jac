@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model App {
+  appId       String @id @default(uuid())
+  mount_total Float
+  app_name    String @default("Fotocopia")
+}
+
+model User {
+  userId       String    @id @default(uuid())
+  name         String
+  lastname     String
+  username     String    @unique
+  email        String    @unique
+  password     String
+  last_session DateTime?
+
+  createBy          String?
+
+  create_at DateTime  @default(now())
+  update_at DateTime  @default(now()) @updatedAt
+  delete_at DateTime?
+
+  machineList     Machine[]
+  productList     Product[]
+  rawmmaterList   Rawmater[]
+  // controlList     Control[]
+  stockList       Stock[]
+}
+
+model Machine {
+  machineId       String    @id     @default(uuid())
+  name            String
+  description     String?
+
+  createId        String
+  createReference User    @relation(fields: [createId], references: [userId])
+
+  // controlList     Control[]
+
+  create_at       DateTime      @default(now())
+  update_at       DateTime      @default(now()) @updatedAt
+  delete_at       DateTime?
+}
+
+model Product {
+  productId       String    @id     @default(uuid())
+  name            String
+  description     String?
+
+  createId        String
+  createReference User    @relation(fields: [createId], references: [userId])
+
+  // controlList     Control[]
+
+  create_at       DateTime      @default(now())
+  update_at       DateTime      @default(now()) @updatedAt
+  delete_at       DateTime?
+}
+
+model Rawmater {
+  rawmatterId       String    @id     @default(uuid())
+  name            String
+  description     String?
+
+  createId        String
+  createReference User    @relation(fields: [createId], references: [userId])
+
+  kg              Int
+  code            String
+  gr              Int
+
+  // controlList     Control[]
+
+  create_at       DateTime      @default(now())
+  update_at       DateTime      @default(now()) @updatedAt
+  delete_at       DateTime?
+}
+
+model Control {
+  controlId           String    @id     @default(uuid())
+
+  date                String
+  kg                  Int
+  gr                  Int
+
+  productId           String
+  rawmatterId         String
+  machineId           String
+  createId            String      
+
+
+  create_at       DateTime      @default(now())
+  update_at       DateTime      @default(now()) @updatedAt
+  delete_at       DateTime?
+  // createReference     User        @relation(fields: [controlId],    references: [userId], onUpdate: Cascade, onDelete: Cascade)
+  // productReference    Product     @relation(fields: [productId],    references: [productId])
+  // machineReference    Machine     @relation(fields: [machineId],    references: [machineId])
+  // rawmatterReference  Rawmater    @relation(fields: [rawmatterId],  references: [rawmatterId])
+}
+
+model Stock {
+  stockId         String    @id     @default(uuid())
+  description     String
+  price           Decimal
+  quantity        Int
+
+  createId        String
+  createReference User    @relation(fields: [createId], references: [userId])
+
+  create_at       DateTime      @default(now())
+  update_at       DateTime      @default(now()) @updatedAt
+  delete_at       DateTime?
+}

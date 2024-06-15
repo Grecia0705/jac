@@ -1,0 +1,42 @@
+
+<div class="container">
+    <div class="row d-flex justify-content-between mb-2">
+        <span></span>
+        <div class="">
+            <a href="/user" class="btn btn-primary">panel</a>
+            <a href="/user/list" class="btn btn-primary">lista</a>
+        </div>
+    </div>
+
+    <form method="post" action="/user/create" class="form-row">
+
+        <div class="form-group col-12 col-lg-5">
+            <label for="t-name" class="">Nombre:</label>
+            <input id="t-name" type="text" name="name" class="form-control" required>
+        </div>  
+
+        <div class="form-group col-12 col-lg-5">
+            <label for="t-lastname" class="">Apellido:</label>
+            <input id="t-lastname" type="text" name="lastname" class="form-control" required>
+        </div>  
+
+        <div class="form-group col-12 col-lg-5">
+            <label for="t-email" class="">Correo:</label>
+            <input id="t-email" type="email" name="email" class="form-control" required>
+        </div>  
+
+        <div class="form-group col-12 col-lg-5">
+            <label for="t-username" class="">Usuario:</label>
+            <input id="t-username" type="text" name="username" class="form-control" required>
+        </div>  
+
+        <div class="form-group col-12 col-lg-5">
+            <label for="t-password" class="">Contraseña:</label>
+            <input id="t-password" type="password" name="password" class="form-control" required>
+        </div> 
+
+        <div class="col-12">
+            <input type="submit" class="btn btn-primary" value="Crear" />
+        </div>
+    </form>
+</div> 

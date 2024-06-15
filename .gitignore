@@ -1,0 +1,11 @@
+node_modules/
+dist/api/
+dist/config/
+dist/controllers/
+dist/moddlewares/
+dist/models/
+dist/type/
+dist/utils/
+dist/app.js
+.env
+prisma/dev.db
