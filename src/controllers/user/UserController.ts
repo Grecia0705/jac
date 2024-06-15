@@ -2,18 +2,29 @@ import { Request, Response } from "express";
 import BaseController from "../BaseController";
 import UserModel from "../../models/user/UserModel";
 import TransactionModel from "../../models/transacction/TransactionModel";
+import MachineModel from "../../models/control/machine/MachineModel";
+import ProductModel from "../../models/control/product/ProductModel";
+import RawmatterModel from "../../models/control/rawmatter/RawmatterModel";
+import ControlModel from "../../models/control/ControlModel";
 import { UserCompleted, UserCreate } from "../../type/user";
 import { OnSession } from "../../middleware/auth";
 
 class UserController extends BaseController {
-
     public async DashboardController (req: Request, res: Response) {
-        // const transactionsCountPromise = TransactionModel.CountAllTransactions({});
 
-        // const transsactions = await transactionsCountPromise;
+        const user = UserModel.CountBy({ filter:{} });
+        const machine = MachineModel.CountAll();
+        const product = ProductModel.CountAll();
+        const rawmatter = RawmatterModel.CountAll();
+        const control = ControlModel.CountAll();
 
         return res.render(`s/dashboard.hbs`, {
             ubication: `Resumen`,
+            user: await user,
+            machine: await machine,
+            product: await product,
+            rawmatter: await rawmatter,
+            control: await control,
         });
     }
 

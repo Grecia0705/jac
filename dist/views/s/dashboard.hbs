@@ -4,17 +4,49 @@
 <div class="container">
     <div class="row layout-top-spacing">
 
-        <div class="col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
+        <a href="/user/list" class="col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
             <div class="widget widget-table-one">
-                <div class="widget-heading">
-                    <h5 class="">Eventos ({{eventsStatus.all}})</h5>
-                </div>
-
                 <div class="widget-content">
-                    
+                    <h5>Usuarios <span class="text-muted">({{user}})</span></h5>
                 </div>
             </div>
-        </div>
+        </a>
+
+    </div>
+
+    <div class="row layout-top-spacing">
+
+        <a href="/control" class="col-lg-3 col-md-4 col-sm-6 col-12 layout-spacing">
+            <div class="widget widget-table-one">
+                <div class="widget-content">
+                    <h5>Control <span class="text-muted">({{control}})</span></h5>
+                </div>
+            </div>
+        </a>
+
+        <a href="/control/machine" class="col-lg-3 col-md-4 col-sm-6 col-12 layout-spacing">
+            <div class="widget widget-table-one">
+                <div class="widget-content">
+                    <h5>Máquinas <span class="text-muted">({{machine}})</span></h5>
+                </div>
+            </div>
+        </a>
+
+        <a href="/control/product" class="col-lg-3 col-md-4 col-sm-6 col-12 layout-spacing">
+            <div class="widget widget-table-one">
+                <div class="widget-content">
+                    <h5>Productos <span class="text-muted">({{product}})</span></h5>
+                </div>
+            </div>
+        </a>
+
+        <a href="/control/rawmatter" class="col-lg-3 col-md-4 col-sm-6 col-12 layout-spacing">
+            <div class="widget widget-table-one">
+                <div class="widget-content">
+                    <h5>Materia prima <span class="text-muted">({{rawmatter}})</span></h5>
+                </div>
+            </div>
+        </a>
 
     </div>
 
