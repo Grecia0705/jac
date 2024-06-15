@@ -8,4 +8,4 @@ dist/type/
 dist/utils/
 dist/app.js
 .env
-prisma/dev.db
+# prisma/dev.db
