@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -39,6 +40,9 @@ model User {
   rawmmaterList   Rawmater[]
   // controlList     Control[]
   stockList       Stock[]
+
+  transactionCateogryList TransactionCategory[]
+  transactionTypeList     TransactionType[]
 }
 
 model Machine {
@@ -124,4 +128,46 @@ model Stock {
   create_at       DateTime      @default(now())
   update_at       DateTime      @default(now()) @updatedAt
   delete_at       DateTime?
+}
+
+model Transaction {
+  transactionId         String    @id     @default(uuid())
+  mount                 Int
+  description           String
+  date                  String
+
+  categoryId            String
+  typeId                String
+
+  createId              String
+
+  create_at             DateTime      @default(now())
+  update_at             DateTime      @default(now()) @updatedAt
+  delete_at             DateTime?
+}
+
+model TransactionCategory {
+  transactionCategoryId         String    @id     @default(uuid())
+  name                  String
+  description                  String
+
+  createId              String
+  createReference       User          @relation(fields: [createId], references: [userId])    
+
+  create_at             DateTime      @default(now())
+  update_at             DateTime      @default(now()) @updatedAt
+  delete_at             DateTime?
+}
+
+model TransactionType {
+  transactionTypeId         String    @id     @default(uuid())
+  name                  String
+  description           String
+  
+  createId              String
+  createReference       User          @relation(fields: [createId], references: [userId])    
+
+  create_at             DateTime      @default(now())
+  update_at             DateTime      @default(now()) @updatedAt
+  delete_at             DateTime?
 }

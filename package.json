@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^5.15.0",
+    "@prisma/client": "^5.15.1",
     "@types/bcrypt": "^5.0.2",
     "@types/connect-flash": "^0.0.40",
     "@types/express-session": "^1.18.0",
@@ -35,7 +35,6 @@
     "passport-local": "^1.0.0",
     "postcss": "^8.4.38",
     "postcss-cli": "^11.0.0",
-    "prisma": "^5.15.0",
     "req-flash": "^0.0.3",
     "tailwindcss": "^3.4.3"
   },
@@ -46,6 +45,7 @@
     "@types/mongoose": "^5.5.1",
     "@types/node": "^12.0.2",
     "nodemon": "^1.19.0",
+    "prisma": "^5.15.1",
     "ts-node": "^8.1.0",
     "tslint": "^5.16.0",
     "typescript": "^5.4.5"

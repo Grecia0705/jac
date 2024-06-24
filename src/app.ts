@@ -15,6 +15,9 @@ import Rawmatter from "./controllers/control/rawmatter/RawmatterController";
 import Machine from "./controllers/control/product/ProductController";
 import Product from "./controllers/control/machine/MachineControl";
 import Stock from "./controllers/stock/StockController";
+import TransactionType from "./controllers/transaction/type/TypeControl";
+import TransactionCategory from "./controllers/transaction/category/CategoryController";
+import Transaction from "./controllers/transaction/TransactionController";
 import Public from "./controllers/PublicController";
 import APIStattictics from "./controllers/API/Statictics";
 import "./config/passport";
@@ -74,6 +77,10 @@ app.use(Product.LoadRoutes());
 app.use(Rawmatter.LoadRoutes());
 app.use(Control.LoadRoutes());
 app.use(Stock.LoadRoutes());
+
+app.use(TransactionType.LoadRoutes());
+app.use(TransactionCategory.LoadRoutes());
+app.use(Transaction.LoadRoutes());
 app.get(`/start/app/user`, User.InsertUserBase);
 
 // Static Files

@@ -1,0 +1,61 @@
+
+
+<div class="container">
+    <div class="row d-flex justify-content-between mb-2">
+        <span></span>
+        <div class="">
+            <a href="/transaction" class="btn btn-primary">lista</a>
+            <a href="/transaction/create" class="btn btn-primary">crear</a>
+        </div>
+    </div>
+
+    <form method="post" action="/transaction/create" class="col-12 col-lg-6 mx-auto card">
+        <div class="card-body form-row">
+
+            <div class="form-group col-12">
+                <label for="t-description" class="">Descripción:</label>
+                <textarea id="t-description" type="text" name="description" class="form-control" required>{{data.description}}</textarea>
+            </div>
+
+            <div class="form-group col-6">
+                <label for="t-mount" class="">Monto:</label>
+                <input id="t-mount" type="number" step="any" value="{{data.mount}}" name="mount" class="form-control" required>
+            </div> 
+
+            <div class="form-group col-6">
+                <label for="t-date" class="">Fecha:</label>
+                <input id="t-date" type="date" name="date" value="{{data.date}}" class="form-control" required>
+            </div> 
+
+            <div class="form-group mb-4 col-6">
+                <label for="type">Tipo ({{data.typeReferende.name}})</label>
+                <select name="typeId" class="form-control" id="type">
+                    <option>selecciona una opción</option>
+                    {{#each types}}
+                        <option value="{{this.transactionTypeId}}">{{this.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <div class="form-group mb-4 col-6">
+                <label for="maquinaList">Categoria ({{data.categoryReferende.name}})</label>
+                <select name="categoryId" class="form-control" id="maquinaList">
+                    <option>selecciona una opción</option>
+                    {{#each category}}
+                        <option value="{{this.transactionCategoryId}}">{{this.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <ul>
+                <li>Creado el: <b>{{#formatDate data.create_at}} {{this}} {{/formatDate}}</b></li>
+                <li>Ultima actualización el: <b>{{#formatDate data.update_at}} {{this}} {{/formatDate}}</b></li>
+                <li>Creado por: <b>{{data.createReference.username}} - {{data.createReference.email}}</b></li>
+            </ul>
+
+            <div class="col-12">
+                <input type="submit" class="btn btn-primary" disabled value="Crear" />
+            </div>
+        </div>
+    </form>
+</div> 

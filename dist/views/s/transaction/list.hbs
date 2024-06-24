@@ -1,0 +1,58 @@
+<link href="/assets/css/tables/table-basic.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/dashboard/dash_2.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/elements/custom-pagination.css" rel="stylesheet" type="text/css" />
+
+<div class="container">
+    <div class="row d-flex justify-content-between mb-2">
+        <span></span>
+        <div class="">
+            <a href="/transaction/create" class="btn btn-primary">crear</a>
+        </div>
+    </div>
+    <div class="row">
+        {{#if list}}
+            <div class="table-responsive">
+                <table class="table table-hover table-light table-bordered mb-4">
+                    <thead>
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Monto</th>
+                            <th>Fecha</th>
+                            <th class="text-center">acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each list}}
+                            <tr>
+                                <td>{{this.description}}</td>
+                                <td>{{this.mount}}</td>
+                                <td>{{this.date}}</td>
+                                <td>
+                                    <a href="/transaction/update/{{this.transactionId}}" class="bi bi-eye-fill lead btn btn-primary">
+                                    </a>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-6">
+                <span class="h6">{{nowTotal}}</span>
+            </div>
+
+            <div class="paginating-container pagination-default col-6">
+                <ul class="pagination">
+                    {{#if nowPathOne}}
+                        <li class="prev"><a href="{{previousPath}}">anterior</a></li>
+                    {{/if}}
+                        <li class=""><span class="px-5">pagina actual {{nowPath}}</span></li>
+                    {{#if nowPathEnd}}
+                        <li class="next"><a href="{{nextPath}}">siguiente</a></li>
+                    {{/if}}
+                </ul>
+            </div>
+        {{else}}
+            <p class="text-muted lead">No hay inventario</p>
+        {{/if}}
+    </div>
+</div>

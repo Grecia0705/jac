@@ -1,4 +1,3 @@
-import { TransactionCreate } from '../type/transaction.d'; 
 import { PrismaClient } from '@prisma/client';
 import { compare, hash } from 'bcrypt';
 
@@ -13,7 +12,7 @@ class AbstractModel {
     }
 
     StartPrisma() {
-        this.prisma = new PrismaClient();
+        return this.prisma = new PrismaClient();
     }
 
     async DistroyPrisma() {
