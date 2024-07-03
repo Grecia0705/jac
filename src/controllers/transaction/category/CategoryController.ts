@@ -95,6 +95,12 @@ class CategoryController extends BaseController {
         }
     }
 
+    public async AddDeleteAt(req: Request, res: Response) {
+        const id = req.params.id;
+        const result = CategoryModel.AtDeleteTransaction({ id });
+        req.flash(`succ`, `Categoria eliminada`);
+        return res.redirect(`/transaction/category/`);
+    }
 
     public LoadRoutes() {
         // this.router.get(`/transaction/category`, OnSession, this.RenderDashboard);
@@ -103,6 +109,7 @@ class CategoryController extends BaseController {
         this.router.get(`/transaction/category/update/:id`, OnSession, this.RenderUpdate);
 
         this.router.post(`/transaction/category/create`, OnSession, this.CreatePost);
+        this.router.post(`/transaction/category/delete/:id`, OnSession, this.AddDeleteAt);
         this.router.post(`/transaction/category/update/:id`, OnSession, this.UpdatePost);
 
         return this.router;

@@ -100,6 +100,13 @@ class MachineController extends BaseController {
         }
     }
 
+    public async AddDeleteAt(req: Request, res: Response) {
+        const id = req.params.id;
+        const result = MachineModel.AtDelete({ id });
+        req.flash(`succ`, `Maquina eliminada`);
+        return res.redirect(`/control/machine`);
+    }
+
     public LoadRoutes() {
         // this.router.get(`${this.pathUrl}`, OnSession, this.RenderDashboard);
         this.router.get(`/control/machine/`, OnSession, this.RenderList);
@@ -107,6 +114,7 @@ class MachineController extends BaseController {
         this.router.get(`/control/machine/update/:id`, OnSession, this.RenderUpdate);
 
         this.router.post(`/control/machine/create`, OnSession, this.CreatePost);
+        this.router.post(`/control/machine/delete/:id`, OnSession, this.AddDeleteAt);
         this.router.post(`/control/machine/update/:id`, OnSession, this.UpdatePost);
 
         return this.router;

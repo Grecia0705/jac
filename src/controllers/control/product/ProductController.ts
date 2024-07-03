@@ -87,6 +87,13 @@ class ProductController extends BaseController {
         }
     }
 
+    public async AddDeleteAt(req: Request, res: Response) {
+        const id = req.params.id;
+        const result = ProductModel.AtDelete({ id });
+        req.flash(`succ`, `Maquina eliminada`);
+        return res.redirect(`/control/product`);
+    }
+
     public LoadRoutes() {
         // this.router.get(`${this.pathUrl}`, OnSession, this.RenderDashboard);
         this.router.get(`/control/product/`, OnSession, this.RenderList);

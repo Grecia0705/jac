@@ -89,6 +89,13 @@ class RawmatterController extends BaseController {
         }
     }
 
+    public async AddDeleteAt(req: Request, res: Response) {
+        const id = req.params.id;
+        const result = RawmatterModel.AtDelete({ id });
+        req.flash(`succ`, `Maquina eliminada`);
+        return res.redirect(`/control/rawmatter/`);
+    }
+
 
     public LoadRoutes() {
         // this.router.get(`/control/rawmatter`, OnSession, this.RenderDashboard);

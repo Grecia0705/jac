@@ -116,12 +116,20 @@ class TransactionController extends BaseController {
         }
     }
 
+    public async AddDeleteAt(req: Request, res: Response) {
+        const id = req.params.id;
+        const result = TransactionModel.AtDeleteTransaction({ id });
+        req.flash(`succ`, `Transacción eliminada`);
+        return res.redirect(`/transaction`);
+    }
+
     public LoadRoutes() {
         this.router.get(`/transaction/`, OnSession, this.RenderList);
         this.router.get(`/transaction/create`, OnSession, this.RenderCreate);
         this.router.get(`/transaction/update/:id`, OnSession, this.RenderUpdate);
 
         this.router.post(`/transaction/create`, OnSession, this.CreatePost);
+        this.router.post(`/transaction/delete/:id`, OnSession, this.AddDeleteAt);
         this.router.post(`/transaction/update/:id`, OnSession, this.UpdatePost);
 
         return this.router;

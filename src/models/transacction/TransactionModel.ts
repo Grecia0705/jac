@@ -24,7 +24,12 @@ class TransactionModel extends AbstractModel {
 
     public async GetById({ id }: {id:string}) {
         this.StartPrisma();
-        const result = await this.prisma.transaction.findFirst({ where:{transactionId:id} });
+        const result = await this.prisma.transaction.findFirst({ where:{
+            AND: {
+                transactionId:id, 
+                delete_at: undefined
+            }
+        }});
         const type = this.prisma.transactionType.findFirst({ where:{ transactionTypeId:result?.typeId } });
         const category = this.prisma.transactionCategory.findFirst({ where:{ transactionCategoryId:result?.categoryId } });
         const user = this.prisma.user.findFirst({ where:{ userId:result?.createId } });
@@ -36,7 +41,6 @@ class TransactionModel extends AbstractModel {
             createReference: await user,
         }
         this.DistroyPrisma();
-        console.log(newResult);
         return newResult;
     }
 
@@ -52,10 +56,19 @@ class TransactionModel extends AbstractModel {
         const result = await this.prisma.transaction.findMany({
             skip: pag*limit,
             take: limit,
+            where: {
+                delete_at: false,
+            }
         });
         this.DistroyPrisma();
-        console.log(result);
         return result;
+    }
+
+    public async AtDeleteTransaction({id}:{id:string}) {
+        this.StartPrisma();
+        this.prisma.transaction.delete({ where:{ transactionId:id }})
+        this.DistroyPrisma();
+        return null
     }
 }
 

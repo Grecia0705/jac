@@ -67,7 +67,7 @@ app.get(`/`, (req, res) => {
 })
 
 
-// app.use("/start/user", User.InsertUserBase);
+app.use("/start/user", User.InsertUserBase);
 // app.use("/start/statictis", User.StartStaticticsForYear);
 
 app.use(User.LoadRouters());

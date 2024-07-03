@@ -11,7 +11,10 @@ class UserModel extends AbstractModel {
     public async GetUsers({pag, limit=10}: {pag:number, limit:number}) {
         const result = await this.prisma.user.findMany({
             skip: pag*10,
-            take: limit
+            take: limit,
+            where: {
+                delete_at: false
+            }
         });
         return result;
     }
@@ -33,7 +36,14 @@ class UserModel extends AbstractModel {
     // busca usuario por email
     public async FindUserByEmail({email}: {email:string}) {
         this.StartPrisma();
-        const result = await this.prisma.user.findUnique({ where:{email} });
+        const result = await this.prisma.user.findFirst({ 
+            where:{
+                AND: {
+                    email,
+                    delete_at: false,
+                }
+            }
+        });
         this.DistroyPrisma();
         return result;
     }
@@ -41,7 +51,12 @@ class UserModel extends AbstractModel {
     // busca usuario por usuario
     public async FindUserByUsername({username}: {username:string}) {
         this.StartPrisma();
-        const result = await this.prisma.user.findUnique({ where:{username} });
+        const result = await this.prisma.user.findFirst({ 
+            where: {
+                username,
+                delete_at: false
+            }
+        });
         this.DistroyPrisma();
         return result;
     }
@@ -49,7 +64,12 @@ class UserModel extends AbstractModel {
     // busca usuario por id
     public async FindUserById({id}: {id:string}) {
         this.StartPrisma();
-        const result = await this.prisma.user.findFirst({ where:{userId:id} });
+        const result = await this.prisma.user.findFirst({ where:{
+            AND: {
+                delete_at: false,
+                userId:id
+            }
+        } });
         this.DistroyPrisma();
         return result;
     }
@@ -62,10 +82,11 @@ class UserModel extends AbstractModel {
     }
 
     // agrega eliminación de uaurio
-    public async AtDeleteUser() {
+    public async AtDeleteUser({id}:{id:string}) {
         this.StartPrisma();
-
+        this.prisma.user.update({ data:{delete_at:true}, where:{userId:id} })
         this.DistroyPrisma();
+        return null
     }
 
     // elimina usuario

@@ -28,16 +28,19 @@ class RawmatterModel extends AbstractModel {
         return result;
     }
     
-    public async ToDelete({ id }: {id:string}) {
+    public async AtDelete({id}:{id:string}) {
         this.StartPrisma();
-        // const result = await this.prisma.rawmater.update({ data:{}, where:{controlId:id} });
+        this.prisma.rawmater.update({ data:{ delete_at:true }, where:{rawmatterId:id} })
         this.DistroyPrisma();
-        return null;
+        return null
     }
     
     public async GetPagination({ pag, limit }: {pag:number, limit:number}) {
         this.StartPrisma();
         const result = await this.prisma.rawmater.findMany({
+            where: {
+                delete_at: false,
+            },
             include: {
                 createReference: true
             },
@@ -52,7 +55,8 @@ class RawmatterModel extends AbstractModel {
         this.StartPrisma();
         const result = await this.prisma.rawmater.findFirst({
             where: {
-                rawmatterId: id
+                rawmatterId: id,
+                delete_at: false,
             },
             include: {
                 createReference: true

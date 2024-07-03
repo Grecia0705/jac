@@ -77,7 +77,8 @@ class ControlModel extends AbstractModel {
         this.StartPrisma();
         const result = await this.prisma.control.findFirst({
             where: {
-                controlId: id
+                controlId: id,
+                delete_at: false,
             }
         });
         if(!result) {

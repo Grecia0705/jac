@@ -24,7 +24,12 @@ class TypeModel extends TrasactionModel {
     public async GetTypeById({ id }: {id:string}) {
         this.StartPrisma();
         const result = await this.prisma.transactionType.findFirst({ 
-            where:{transactionTypeId:id},
+            where:{
+                AND: {
+                    transactionTypeId:id,
+                    delete_at: false,
+                },
+            }
         });
         this.DistroyPrisma();
         return result;
@@ -35,6 +40,9 @@ class TypeModel extends TrasactionModel {
         const result = await this.prisma.transactionType.findMany({
             skip: pag*limit,
             take: limit,
+            where: {
+                delete_at: false,
+            }
         });
         this.DistroyPrisma();
         return result;
@@ -46,6 +54,13 @@ class TypeModel extends TrasactionModel {
         this.DistroyPrisma();
         return result;
     } 
+
+    public async AtDeleteType({id}:{id:string}) {
+        this.StartPrisma();
+        this.prisma.transactionType.delete({ where:{transactionTypeId:id} })
+        this.DistroyPrisma();
+        return null
+    }
 }
 
 export default new TypeModel;

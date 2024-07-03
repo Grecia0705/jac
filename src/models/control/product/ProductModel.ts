@@ -21,16 +21,19 @@ class ProductModel extends AbstractModel {
         return result;
     }
     
-    public async ToDelete({ id }: {id:string}) {
+    public async AtDelete({id}:{id:string}) {
         this.StartPrisma();
-        // const result = await this.prisma.product.update({ data:{}, where:{controlId:id} });
+        this.prisma.product.update({ data:{delete_at:true}, where:{productId:id} })
         this.DistroyPrisma();
-        return null;
+        return null
     }
     
     public async GetPagination({ pag, limit }: {pag:number, limit:number}) {
         this.StartPrisma();
         const result = await this.prisma.product.findMany({
+            where: {
+                delete_at: false,
+            },
             include: {
                 createReference: true
             },
@@ -52,7 +55,8 @@ class ProductModel extends AbstractModel {
         this.StartPrisma();
         const result = await this.prisma.product.findFirst({
             where: {
-                productId: id
+                productId: id,
+                delete_at: false,
             },
             include: {
                 createReference: true

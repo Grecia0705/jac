@@ -27,13 +27,13 @@ model User {
   username     String    @unique
   email        String    @unique
   password     String
-  last_session DateTime?
+  last_session Boolean   @default(false)
 
   createBy          String?
 
   create_at DateTime  @default(now())
   update_at DateTime  @default(now()) @updatedAt
-  delete_at DateTime?
+  delete_at Boolean   @default(false)
 
   machineList     Machine[]
   productList     Product[]
@@ -51,13 +51,13 @@ model Machine {
   description     String?
 
   createId        String
-  createReference User    @relation(fields: [createId], references: [userId])
+  createReference User    @relation(fields: [createId], references: [userId], onDelete: Cascade)
 
   // controlList     Control[]
 
   create_at       DateTime      @default(now())
   update_at       DateTime      @default(now()) @updatedAt
-  delete_at       DateTime?
+  delete_at       Boolean   @default(false)
 }
 
 model Product {
@@ -66,13 +66,13 @@ model Product {
   description     String?
 
   createId        String
-  createReference User    @relation(fields: [createId], references: [userId])
+  createReference User    @relation(fields: [createId], references: [userId], onDelete: Cascade)
 
   // controlList     Control[]
 
   create_at       DateTime      @default(now())
   update_at       DateTime      @default(now()) @updatedAt
-  delete_at       DateTime?
+  delete_at       Boolean   @default(false)
 }
 
 model Rawmater {
@@ -81,7 +81,7 @@ model Rawmater {
   description     String?
 
   createId        String
-  createReference User    @relation(fields: [createId], references: [userId])
+  createReference User    @relation(fields: [createId], references: [userId], onDelete: Cascade)
 
   kg              Int
   code            String
@@ -91,7 +91,7 @@ model Rawmater {
 
   create_at       DateTime      @default(now())
   update_at       DateTime      @default(now()) @updatedAt
-  delete_at       DateTime?
+  delete_at       Boolean   @default(false)
 }
 
 model Control {
@@ -109,7 +109,7 @@ model Control {
 
   create_at       DateTime      @default(now())
   update_at       DateTime      @default(now()) @updatedAt
-  delete_at       DateTime?
+  delete_at       Boolean   @default(false)
   // createReference     User        @relation(fields: [controlId],    references: [userId], onUpdate: Cascade, onDelete: Cascade)
   // productReference    Product     @relation(fields: [productId],    references: [productId])
   // machineReference    Machine     @relation(fields: [machineId],    references: [machineId])
@@ -123,11 +123,11 @@ model Stock {
   quantity        Int
 
   createId        String
-  createReference User    @relation(fields: [createId], references: [userId])
+  createReference User    @relation(fields: [createId], references: [userId], onDelete: Cascade)
 
   create_at       DateTime      @default(now())
   update_at       DateTime      @default(now()) @updatedAt
-  delete_at       DateTime?
+  delete_at       Boolean   @default(false)
 }
 
 model Transaction {
@@ -142,8 +142,8 @@ model Transaction {
   createId              String
 
   create_at             DateTime      @default(now())
-  update_at             DateTime      @default(now()) @updatedAt
-  delete_at             DateTime?
+  update_at             DateTime      @default(now()) @updatedAt 
+  delete_at             Boolean   @default(false)
 }
 
 model TransactionCategory {
@@ -152,11 +152,11 @@ model TransactionCategory {
   description                  String
 
   createId              String
-  createReference       User          @relation(fields: [createId], references: [userId])    
+  createReference       User          @relation(fields: [createId], references: [userId], onDelete: Cascade)
 
   create_at             DateTime      @default(now())
   update_at             DateTime      @default(now()) @updatedAt
-  delete_at             DateTime?
+  delete_at             Boolean   @default(false)
 }
 
 model TransactionType {
@@ -165,9 +165,9 @@ model TransactionType {
   description           String
   
   createId              String
-  createReference       User          @relation(fields: [createId], references: [userId])    
+  createReference       User          @relation(fields: [createId], references: [userId], onDelete: Cascade)    
 
   create_at             DateTime      @default(now())
   update_at             DateTime      @default(now()) @updatedAt
-  delete_at             DateTime?
+  delete_at             Boolean   @default(false)
 }

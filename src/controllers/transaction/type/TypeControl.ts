@@ -5,6 +5,7 @@ import { UserCompleted } from "../../../type/user";
 import { TypeCreate } from "../../../type/transaction";
 import TypeModel from "../../../models/transacction/TypeModel";
 import { Languaje, TypesFlash } from "../../../var";
+import CategoryModel from "../../../models/transacction/CategoryModel";
 
 class TypeController extends BaseController {
 
@@ -98,6 +99,12 @@ class TypeController extends BaseController {
         }
     }
 
+    public async AddDeleteAt(req: Request, res: Response) {
+        const id = req.params.id;
+        const result = TypeModel.AtDeleteType({ id });
+        req.flash(`succ`, `Categoria eliminada`);
+        return res.redirect(`/transaction/type/`);
+    }
 
     public LoadRoutes() {
         // this.router.get(`/transaction/type`, OnSession, this.RenderDashboard);
@@ -105,6 +112,7 @@ class TypeController extends BaseController {
         this.router.get(`/transaction/type/create`, OnSession, this.RenderCreate);
         this.router.get(`/transaction/type/update/:id`, OnSession, this.RenderUpdate);
 
+        this.router.post(`/transaction/type/delete/:id`, OnSession, this.AddDeleteAt);
         this.router.post(`/transaction/type/create`, OnSession, this.CreatePost);
         this.router.post(`/transaction/type/update/:id`, OnSession, this.UpdatePost);
 

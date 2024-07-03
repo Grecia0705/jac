@@ -83,6 +83,17 @@ class RawmatterController extends BaseController {
         }
     }
 
+    public async AddDeleteAt(req: Request, res: Response) {
+        try {
+            const id = req.params.id;
+            const result = StockModel.AtDeleteStock({ id });
+            req.flash(`succ`, `Transacción eliminada`);
+        } catch (error) {
+            console.log(error);
+        }
+        return res.redirect(`/stock`);
+    }
+
     public LoadRoutes() {
         this.router.get(`/stock`, OnSession, this.RenderList);
         this.router.get(`/stock/list`, OnSession, this.RenderList);
@@ -90,6 +101,7 @@ class RawmatterController extends BaseController {
         this.router.get(`/stock/update/:id`, OnSession, this.RenderUpdate);
 
         this.router.post(`/stock/create`, OnSession, this.CreatePost);
+        this.router.post(`/stock/delete/:id`, OnSession, this.AddDeleteAt);
         this.router.post(`/stock/update/:id`, OnSession, this.UpdatePost);
 
         return this.router;

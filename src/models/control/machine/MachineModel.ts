@@ -21,16 +21,19 @@ class MachineModel extends AbstractModel {
         return result;
     }
     
-    public async ToDelete({ id }: {id:string}) {
+    public async AtDelete({id}:{id:string}) {
         this.StartPrisma();
-        // const result = await this.prisma.machine.update({ data:{}, where:{controlId:id} });
+        this.prisma.machine.update({ data:{ delete_at:true }, where:{machineId:id} })
         this.DistroyPrisma();
-        return null;
+        return null
     }
     
     public async GetPagination({ pag, limit }: {pag:number, limit:number}) {
         this.StartPrisma();
         const result = await this.prisma.machine.findMany({
+            where: {
+                delete_at: false,
+            },
             include: {
                 createReference: true
             },
@@ -52,7 +55,8 @@ class MachineModel extends AbstractModel {
         this.StartPrisma();
         const result = await this.prisma.machine.findFirst({
             where: {
-                machineId: id
+                machineId: id,
+                delete_at: false,
             },
             include: {
                 createReference: true

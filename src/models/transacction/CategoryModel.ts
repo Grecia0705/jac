@@ -23,7 +23,11 @@ class CategoryModel extends TrasactionModel {
 
     public async GetCategoryById({ id }: {id:string}) {
         this.StartPrisma();
-        const result = await this.prisma.transactionCategory.findFirst({ where:{transactionCategoryId:id}, 
+        const result = await this.prisma.transactionCategory.findFirst({ 
+            where:{
+                transactionCategoryId:id,
+                delete_at: false,
+            }, 
             include:{
                 createReference:true
             }
@@ -38,6 +42,9 @@ class CategoryModel extends TrasactionModel {
             include: {
                 createReference: true,
             },
+            where: {
+                delete_at: false,
+            },
             skip: pag*limit,
             take: limit,
         });
@@ -51,6 +58,13 @@ class CategoryModel extends TrasactionModel {
         this.DistroyPrisma();
         return result;
     } 
+
+    public async AtDeleteCategory({id}:{id:string}) {
+        this.StartPrisma();
+        this.prisma.transactionCategory.update({ data:{delete_at:true}, where:{transactionCategoryId:id} })
+        this.DistroyPrisma();
+        return null
+    }
 }
 
 export default new CategoryModel;

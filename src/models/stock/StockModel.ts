@@ -34,6 +34,9 @@ class StockModel extends AbstractModel {
             include: {
                 createReference: true
             },
+            where: {
+                delete_at: false,
+            },
             skip: pag*limit,
             take: limit,
         });
@@ -45,7 +48,9 @@ class StockModel extends AbstractModel {
         this.StartPrisma();
         const result = await this.prisma.stock.findFirst({
             where: {
-                stockId: id
+                stockId: id,
+                delete_at: false,
+
             },
             include: {
                 createReference: true,
@@ -53,6 +58,14 @@ class StockModel extends AbstractModel {
         });
         this.DistroyPrisma();
         return result;
+    }
+
+    public async AtDeleteStock({id}:{id:string}) {
+        this.StartPrisma();
+        console.log(id);
+        await this.prisma.stock.update({ data:{ delete_at:true }, where:{stockId:id} })
+        this.DistroyPrisma();
+        return null
     }
 }
 
