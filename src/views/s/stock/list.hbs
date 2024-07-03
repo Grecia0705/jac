@@ -32,10 +32,12 @@
                                 <td>
                                     <a href="/stock/update/{{this.stockId}}" class="bi bi-eye lead btn btn-primary">
                                     </a>
+                                    {{#validRoot ../user.rol}}
                                     <form action="/stock/delete/{{this.stockId}}" method="post">
                                         <button type="submit" class="bi bi-eye lead btn btn-danger">
                                         </button>
                                     </form>
+                                    {{/validRoot }}
                                 </td>
                             </tr>
                         {{/each}}

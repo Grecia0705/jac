@@ -29,6 +29,7 @@ model User {
   password     String
   last_session Boolean   @default(false)
 
+  rol               String      @default("ADMIN")
   createBy          String?
 
   create_at DateTime  @default(now())
@@ -57,7 +58,7 @@ model Machine {
 
   create_at       DateTime      @default(now())
   update_at       DateTime      @default(now()) @updatedAt
-  delete_at       Boolean   @default(false)
+  delete_at       Boolean       @default(false)
 }
 
 model Product {

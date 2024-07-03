@@ -25,9 +25,18 @@ class UserModel extends AbstractModel {
     }
 
     // crea usuario
-    public async CreateUser({data}:{data:UserCreate}) {
+    public async CreateUser({data, rol}:{data:UserCreate, rol?:string}) {
         this.StartPrisma();
-        const result = await this.prisma.user.create({data}); 
+        const result = await this.prisma.user.create({
+            data: {
+                email:data.email,
+                lastname:data.lastname,
+                name:data.name,
+                password:data.password,
+                username:data.username,
+                rol: rol ? rol : `ADMIN`
+            }
+        }); 
         this.DistroyPrisma();
         // this.StaticticsUpdate({});
         return result;

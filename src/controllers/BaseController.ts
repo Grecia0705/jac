@@ -22,7 +22,7 @@ class BaseController {
                 createBy: null,
             }
             
-            const superadminResult = await model.CreateUser({data:superadmin});
+            const superadminResult = await model.CreateUser({data:superadmin, rol:"ROOT"});
 
             listResponse.push(`UserCreate: ${superadminResult.name} ${superadminResult.lastname}`);  
             
