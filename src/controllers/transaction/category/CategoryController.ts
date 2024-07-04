@@ -97,7 +97,8 @@ class CategoryController extends BaseController {
 
     public async AddDeleteAt(req: Request, res: Response) {
         const id = req.params.id;
-        const result = CategoryModel.AtDeleteTransaction({ id });
+        console.log(req.params);
+        const result = CategoryModel.AtDeleteCategory({ id });
         req.flash(`succ`, `Categoria eliminada`);
         return res.redirect(`/transaction/category/`);
     }

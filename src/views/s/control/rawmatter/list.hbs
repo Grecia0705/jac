@@ -37,6 +37,12 @@
                                 <td>
                                     <a href="/control/rawmatter/update/{{this.rawmatterId}}" class="bi bi-eye-fill lead btn btn-primary">
                                     </a>
+                                    {{#validRoot ../user.rol}}
+                                    <form action="/control/rawmmater/delete/{{this.rawmmaterId}}" method="post">
+                                        <button type="submit" class="bi bi-eye lead btn btn-danger">
+                                        </button>
+                                    </form>
+                                    {{/validRoot }}
                                 </td>
                             </tr>
                         {{/each}}

@@ -170,5 +170,5 @@ model TransactionType {
 
   create_at             DateTime      @default(now())
   update_at             DateTime      @default(now()) @updatedAt
-  delete_at             Boolean   @default(false)
+  delete_at             Boolean       @default(false)
 }

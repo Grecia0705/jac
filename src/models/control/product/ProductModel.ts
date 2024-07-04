@@ -23,7 +23,7 @@ class ProductModel extends AbstractModel {
     
     public async AtDelete({id}:{id:string}) {
         this.StartPrisma();
-        this.prisma.product.update({ data:{delete_at:true}, where:{productId:id} })
+        await this.prisma.product.update({ data:{delete_at:true}, where:{productId:id} })
         this.DistroyPrisma();
         return null
     }

@@ -30,6 +30,12 @@
                                 <td>
                                     <a href="/transaction/category/update/{{this.transactionCategoryId}}" class="bi bi-eye-fill lead btn btn-primary">
                                     </a>
+                                    {{#validRoot ../user.rol}}
+                                    <form action="/transaction/category/delete/{{../this.transactionCategoryId}}" method="post">
+                                        <button type="submit" class="bi bi-eye lead btn btn-danger">
+                                        </button>
+                                    </form>
+                                    {{/validRoot }}
                                 </td>
                             </tr>
                         {{/each}}

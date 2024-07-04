@@ -93,7 +93,7 @@ class UserModel extends AbstractModel {
     // agrega eliminación de uaurio
     public async AtDeleteUser({id}:{id:string}) {
         this.StartPrisma();
-        this.prisma.user.update({ data:{delete_at:true}, where:{userId:id} })
+        await this.prisma.user.update({ data:{delete_at:true}, where:{userId:id} })
         this.DistroyPrisma();
         return null
     }

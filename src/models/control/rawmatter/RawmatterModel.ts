@@ -30,7 +30,7 @@ class RawmatterModel extends AbstractModel {
     
     public async AtDelete({id}:{id:string}) {
         this.StartPrisma();
-        this.prisma.rawmater.update({ data:{ delete_at:true }, where:{rawmatterId:id} })
+        await this.prisma.rawmater.update({ data:{ delete_at:true }, where:{rawmatterId:id} })
         this.DistroyPrisma();
         return null
     }

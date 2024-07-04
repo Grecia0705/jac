@@ -61,7 +61,7 @@ class CategoryModel extends TrasactionModel {
 
     public async AtDeleteCategory({id}:{id:string}) {
         this.StartPrisma();
-        this.prisma.transactionCategory.update({ data:{delete_at:true}, where:{transactionCategoryId:id} })
+        await this.prisma.transactionCategory.update({ data:{delete_at:true}, where:{transactionCategoryId:id} })
         this.DistroyPrisma();
         return null
     }

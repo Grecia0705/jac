@@ -66,7 +66,7 @@ class TransactionModel extends AbstractModel {
 
     public async AtDeleteTransaction({id}:{id:string}) {
         this.StartPrisma();
-        this.prisma.transaction.delete({ where:{ transactionId:id }})
+        this.prisma.transaction.update({ data:{ delete_at:true }, where:{ transactionId:id }})
         this.DistroyPrisma();
         return null
     }

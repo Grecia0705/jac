@@ -23,7 +23,7 @@ class MachineModel extends AbstractModel {
     
     public async AtDelete({id}:{id:string}) {
         this.StartPrisma();
-        this.prisma.machine.update({ data:{ delete_at:true }, where:{machineId:id} })
+        await this.prisma.machine.update({ data:{ delete_at:true }, where:{machineId:id} })
         this.DistroyPrisma();
         return null
     }

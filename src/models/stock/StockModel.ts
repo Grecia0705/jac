@@ -62,7 +62,6 @@ class StockModel extends AbstractModel {
 
     public async AtDeleteStock({id}:{id:string}) {
         this.StartPrisma();
-        console.log(id);
         await this.prisma.stock.update({ data:{ delete_at:true }, where:{stockId:id} })
         this.DistroyPrisma();
         return null

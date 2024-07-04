@@ -57,7 +57,7 @@ class TypeModel extends TrasactionModel {
 
     public async AtDeleteType({id}:{id:string}) {
         this.StartPrisma();
-        this.prisma.transactionType.delete({ where:{transactionTypeId:id} })
+        this.prisma.transactionType.update({ data:{ delete_at: true }, where:{transactionTypeId:id} })
         this.DistroyPrisma();
         return null
     }
