@@ -110,7 +110,7 @@ class CategoryController extends BaseController {
         this.router.get(`/transaction/category/update/:id`, OnSession, this.RenderUpdate);
 
         this.router.post(`/transaction/category/create`, OnSession, this.CreatePost);
-        this.router.post(`/transaction/category/delete/:id`, OnSession, this.AddDeleteAt);
+        this.router.get(`/transaction/category/delete/:id`, OnSession, this.AddDeleteAt);
         this.router.post(`/transaction/category/update/:id`, OnSession, this.UpdatePost);
 
         return this.router;

@@ -112,7 +112,7 @@ class RawmatterController extends BaseController_1.default {
         this.router.get(`/stock/create`, auth_1.OnSession, this.RenderCreate);
         this.router.get(`/stock/update/:id`, auth_1.OnSession, this.RenderUpdate);
         this.router.post(`/stock/create`, auth_1.OnSession, this.CreatePost);
-        this.router.post(`/stock/delete/:id`, auth_1.OnSession, this.AddDeleteAt);
+        this.router.get(`/stock/delete/:id`, auth_1.OnSession, this.AddDeleteAt);
         this.router.post(`/stock/update/:id`, auth_1.OnSession, this.UpdatePost);
         return this.router;
     }

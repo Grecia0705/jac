@@ -37,6 +37,10 @@
                                 <td>
                                     <a href="/control/rawmatter/update/{{this.rawmatterId}}" class="bi bi-eye-fill lead btn btn-primary">
                                     </a>
+                                    {{#validRoot ../user.rol}}
+                                    <a href="/control/rawmatter/delete/{{../this.rawmatterId}}" class="bi bi-eye-fill lead btn btn-danger">
+                                    </a>
+                                    {{/validRoot }}
                                 </td>
                             </tr>
                         {{/each}}

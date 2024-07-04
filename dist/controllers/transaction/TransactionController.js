@@ -130,7 +130,7 @@ class TransactionController extends BaseController_1.default {
         this.router.get(`/transaction/create`, auth_1.OnSession, this.RenderCreate);
         this.router.get(`/transaction/update/:id`, auth_1.OnSession, this.RenderUpdate);
         this.router.post(`/transaction/create`, auth_1.OnSession, this.CreatePost);
-        this.router.post(`/transaction/delete/:id`, auth_1.OnSession, this.AddDeleteAt);
+        this.router.get(`/transaction/delete/:id`, auth_1.OnSession, this.AddDeleteAt);
         this.router.post(`/transaction/update/:id`, auth_1.OnSession, this.UpdatePost);
         return this.router;
     }

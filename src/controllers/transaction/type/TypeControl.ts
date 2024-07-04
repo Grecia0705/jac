@@ -112,7 +112,7 @@ class TypeController extends BaseController {
         this.router.get(`/transaction/type/create`, OnSession, this.RenderCreate);
         this.router.get(`/transaction/type/update/:id`, OnSession, this.RenderUpdate);
 
-        this.router.post(`/transaction/type/delete/:id`, OnSession, this.AddDeleteAt);
+        this.router.get(`/transaction/type/delete/:id`, OnSession, this.AddDeleteAt);
         this.router.post(`/transaction/type/create`, OnSession, this.CreatePost);
         this.router.post(`/transaction/type/update/:id`, OnSession, this.UpdatePost);
 

@@ -35,6 +35,10 @@
                                 <td>
                                     <a href="/control/machine/update/{{this.machineId}}" class="bi bi-eye-fill lead btn btn-primary">
                                     </a>
+                                    {{#validRoot ../user.rol}}
+                                        <a href="/control/machine/delete/{{../this.machineId}}" type="submit" class="bi bi-eye lead btn btn-danger">
+                                        </a>
+                                    {{/validRoot }}
                                 </td>
                             </tr>
                         {{/each}}

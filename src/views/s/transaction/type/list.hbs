@@ -31,10 +31,8 @@
                                     <a href="/transaction/type/update/{{this.transactionTypeId}}" class="bi bi-eye-fill lead btn btn-primary">
                                     </a>
                                     {{#validRoot ../user.rol}}
-                                    <form action="/transaction/type/delete/{{../this.transactionTypeId}}" method="post">
-                                        <button type="submit" class="bi bi-eye lead btn btn-danger">
-                                        </button>
-                                    </form>
+                                    <a href="/transaction/type/delete/{{../this.transactionTypeId}}" class="bi bi-eye-fill lead btn btn-danger">
+                                    </a>
                                     {{/validRoot }}
                                 </td>
                             </tr>

@@ -114,7 +114,7 @@ class MachineController extends BaseController {
         this.router.get(`/control/machine/update/:id`, OnSession, this.RenderUpdate);
 
         this.router.post(`/control/machine/create`, OnSession, this.CreatePost);
-        this.router.post(`/control/machine/delete/:id`, OnSession, this.AddDeleteAt);
+        this.router.get(`/control/machine/delete/:id`, OnSession, this.AddDeleteAt);
         this.router.post(`/control/machine/update/:id`, OnSession, this.UpdatePost);
 
         return this.router;

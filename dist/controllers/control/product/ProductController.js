@@ -94,7 +94,7 @@ class ProductController extends BaseController_1.default {
         return __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id;
             const result = ProductModel_1.default.AtDelete({ id });
-            req.flash(`succ`, `Maquina eliminada`);
+            req.flash(`succ`, `Producto eliminada`);
             return res.redirect(`/control/product`);
         });
     }
@@ -105,6 +105,7 @@ class ProductController extends BaseController_1.default {
         this.router.get(`/control/product/update/:id`, auth_1.OnSession, this.RenderUpdate);
         this.router.post(`/control/product/create`, auth_1.OnSession, this.CreatePost);
         this.router.post(`/control/product/update/:id`, auth_1.OnSession, this.UpdatePost);
+        this.router.get(`/control/product/delete/:id`, auth_1.OnSession, this.AddDeleteAt);
         return this.router;
     }
 }

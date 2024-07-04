@@ -96,7 +96,6 @@ class RawmatterController extends BaseController {
         return res.redirect(`/control/rawmatter/`);
     }
 
-
     public LoadRoutes() {
         // this.router.get(`/control/rawmatter`, OnSession, this.RenderDashboard);
         this.router.get(`/control/rawmatter/`, OnSession, this.RenderList);
@@ -105,6 +104,7 @@ class RawmatterController extends BaseController {
 
         this.router.post(`/control/rawmatter/create`, OnSession, this.CreatePost);
         this.router.post(`/control/rawmatter/update/:id`, OnSession, this.UpdatePost);
+        this.router.get(`/control/rawmatter/delete/:id`, OnSession, this.AddDeleteAt);
 
         return this.router;
     }

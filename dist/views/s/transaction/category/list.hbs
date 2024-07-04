@@ -30,6 +30,10 @@
                                 <td>
                                     <a href="/transaction/category/update/{{this.transactionCategoryId}}" class="bi bi-eye-fill lead btn btn-primary">
                                     </a>
+                                    {{#validRoot ../user.rol}}
+                                    <a href="/transaction/category/delete/{{this.transactionCategoryId}}" class="bi bi-eye-fill lead btn btn-danger">
+                                    </a>
+                                    {{/validRoot }}
                                 </td>
                             </tr>
                         {{/each}}

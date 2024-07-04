@@ -114,7 +114,7 @@ class TypeController extends BaseController_1.default {
         this.router.get(`/transaction/type/`, auth_1.OnSession, this.RenderList);
         this.router.get(`/transaction/type/create`, auth_1.OnSession, this.RenderCreate);
         this.router.get(`/transaction/type/update/:id`, auth_1.OnSession, this.RenderUpdate);
-        this.router.post(`/transaction/type/delete/:id`, auth_1.OnSession, this.AddDeleteAt);
+        this.router.get(`/transaction/type/delete/:id`, auth_1.OnSession, this.AddDeleteAt);
         this.router.post(`/transaction/type/create`, auth_1.OnSession, this.CreatePost);
         this.router.post(`/transaction/type/update/:id`, auth_1.OnSession, this.UpdatePost);
         return this.router;
