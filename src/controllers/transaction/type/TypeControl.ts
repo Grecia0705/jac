@@ -17,8 +17,8 @@ class TypeController extends BaseController {
         const pag = req.query.pag | 0;
         const limit = req.query.limit | 10;
 
-        const type = TypeModel.GetPagination({pag, limit});
-        const countPromise = TypeModel.CountAll();
+        const type = TypeModel.GetPaginationType({pag, limit});
+        const countPromise = TypeModel.CountTypeAll();
 
         console.log(type);
 

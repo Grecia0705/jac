@@ -39,7 +39,7 @@ model User {
   machineList     Machine[]
   productList     Product[]
   rawmmaterList   Rawmater[]
-  // controlList     Control[]
+  controlList     Control[]
   stockList       Stock[]
 
   transactionCateogryList TransactionCategory[]
@@ -54,7 +54,7 @@ model Machine {
   createId        String
   createReference User    @relation(fields: [createId], references: [userId], onDelete: Cascade)
 
-  // controlList     Control[]
+  controlList     Control[]
 
   create_at       DateTime      @default(now())
   update_at       DateTime      @default(now()) @updatedAt
@@ -69,7 +69,7 @@ model Product {
   createId        String
   createReference User    @relation(fields: [createId], references: [userId], onDelete: Cascade)
 
-  // controlList     Control[]
+  controlList     Control[]
 
   create_at       DateTime      @default(now())
   update_at       DateTime      @default(now()) @updatedAt
@@ -88,7 +88,7 @@ model Rawmater {
   code            String
   gr              Int
 
-  // controlList     Control[]
+  controlList     Control[]
 
   create_at       DateTime      @default(now())
   update_at       DateTime      @default(now()) @updatedAt
@@ -110,11 +110,12 @@ model Control {
 
   create_at       DateTime      @default(now())
   update_at       DateTime      @default(now()) @updatedAt
-  delete_at       Boolean   @default(false)
-  // createReference     User        @relation(fields: [controlId],    references: [userId], onUpdate: Cascade, onDelete: Cascade)
-  // productReference    Product     @relation(fields: [productId],    references: [productId])
-  // machineReference    Machine     @relation(fields: [machineId],    references: [machineId])
-  // rawmatterReference  Rawmater    @relation(fields: [rawmatterId],  references: [rawmatterId])
+  delete_at       Boolean       @default(false)
+
+  createReference     User        @relation(fields: [controlId],    references: [userId], onUpdate: Cascade, onDelete: Cascade)
+  productReference    Product     @relation(fields: [productId],    references: [productId])
+  machineReference    Machine     @relation(fields: [machineId],    references: [machineId])
+  rawmatterReference  Rawmater    @relation(fields: [rawmatterId],  references: [rawmatterId])
 }
 
 model Stock {
@@ -138,7 +139,9 @@ model Transaction {
   date                  String
 
   categoryId            String
+  categoryReference     TransactionCategory     @relation(fields: [categoryId], references: [transactionCategoryId])
   typeId                String
+  typeReference     TransactionType     @relation(fields: [typeId], references: [transactionTypeId])
 
   createId              String
 
@@ -158,6 +161,8 @@ model TransactionCategory {
   create_at             DateTime      @default(now())
   update_at             DateTime      @default(now()) @updatedAt
   delete_at             Boolean   @default(false)
+
+  transactions          Transaction[]
 }
 
 model TransactionType {
@@ -171,4 +176,28 @@ model TransactionType {
   create_at             DateTime      @default(now())
   update_at             DateTime      @default(now()) @updatedAt
   delete_at             Boolean       @default(false)
+
+  transactions          Transaction[]
 }
+
+model StaticticsObjectsYear {
+  staticticsForYearId         String      @id     @default(uuid())
+  year                        Int
+
+  objectType                  String              @default("Transaction")
+  objectName                  String
+
+  total_month_1               Int                 @default(0)
+  total_month_2               Int                 @default(0)
+  total_month_3               Int                 @default(0)
+  total_month_4               Int                 @default(0)
+  total_month_5               Int                 @default(0)
+  total_month_6               Int                 @default(0)
+  total_month_7               Int                 @default(0)
+  total_month_8               Int                 @default(0)
+  total_month_9               Int                 @default(0)
+  total_month_10              Int                 @default(0)
+  total_month_11              Int                 @default(0)
+  total_month_12              Int                 @default(0)
+}
+

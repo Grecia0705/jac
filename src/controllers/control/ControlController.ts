@@ -9,6 +9,8 @@ import MachineModel from "../../models/control/machine/MachineModel";
 import ProductModel from "../../models/control/product/ProductModel";
 import { RawMatterCreate } from "../../type/rawmatter";
 import { Languaje, TypesFlash } from "../../var";
+import StaticticsTransaction from "../../models/statictics/StaticticsTransaction";
+
 
 class ControlController extends BaseController {
 
@@ -101,8 +103,9 @@ class ControlController extends BaseController {
                 createId:user.userId,                
             };
 
-            console.log(data);
-            // return res.redirect(`/control/list`);
+            const machinePromise = MachineModel.GetById({ id:data.machineId });
+            const producPromise = ProductModel.GetById({ id:data.productId });
+            // const rawmatterPromise = RawmatterModel.GetById({ id:data.rawmatterId });
 
             const createPromise = ControlModel.Create({data});
             const raw = await RawmatterModel.GetById({ id: data.rawmatterId });
@@ -118,10 +121,20 @@ class ControlController extends BaseController {
                     kg: raw.gr,
                     name: raw.name
                 } 
+
+                await StaticticsTransaction.conectOrCreate({ name:`${raw.name}`,num:1, type:`Rawmatter` });
                 await RawmatterModel.Update({ id:raw.rawmatterId, data:UpdateRaw });
             }
+
+            const machine = await machinePromise;
+            const product = await producPromise;
             
+            await StaticticsTransaction.conectOrCreate({ name:`Control`,num:1, type:`Control` });
+            await StaticticsTransaction.conectOrCreate({ name:`${machine?.name}`,num:1, type:`Machine` });
+            await StaticticsTransaction.conectOrCreate({ name:`${product?.name}`,num:1, type:`Product` });
+
             await createPromise;
+
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(`/control`);
 

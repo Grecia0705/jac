@@ -1,0 +1,99 @@
+<div class="container">
+    <div class="row">
+        <form action="/report/control" method="GET" class="col-12 card">
+            <div class="card-body">
+
+                {{!-- <label class="w-100">
+                    <span>Mes</span>
+                    <select type="text" name="month" class="form-control w-full">
+                        <option value="" selected>seleccione un mes</option>
+                        <option value="01">Enero</option>
+                        <option value="02">Febrero</option>
+                        <option value="03">Marzo</option>
+                        <option value="04">Abril</option>
+                        <option value="05">Mayo</option>
+                        <option value="06">Junio</option>
+                        <option value="07">Julio</option>
+                        <option value="08">Agosto</option>
+                        <option value="09">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                </label> --}}
+                
+                <label class="w-100">
+                    <span>Máquina</span>
+                    <select type="text" name="machine" class="form-control w-full">
+                        <option value="" selected>seleccione un estado</option>
+                        {{#each machineList}}
+                            <option value="{{this.machineId}}">{{this.name}} - {{this.machineId}}</option>
+                        {{/each}}
+                    </select>
+                </label>
+
+                <label class="w-100">
+                    <span>Producto</span>
+                    <select type="text" name="product" class="form-control w-full">
+                        <option value="" selected>seleccione un estado</option>
+                        {{#each productList}}
+                            <option value="{{this.productId}}">{{this.name}} - {{this.productId}}</option>
+                        {{/each}}
+                    </select>
+                </label>
+
+                <label class="w-100">
+                    <span>Materia Prima</span>
+                    <select type="text" name="rawmatter" class="form-control w-full">
+                        <option value="" selected>seleccione un estado</option>
+                        {{#each rawmatterList}}
+                            <option value="{{this.rawmatterId}}">{{this.name}} - {{this.rawmatterId}}</option>
+                        {{/each}}
+                    </select>
+                </label>
+
+                <input type="submit" value="Generar Reporte" class="btn btn-primary" />
+            </div>            
+        </form>
+    </div>
+
+
+{{#if filter}}
+    <div class="row mt-3">
+        <h4 class="col-12">Filtros</h4>
+        {{#each filter}}
+            <div class="card col-12 col-md-4 col-lg-3">
+                <div class="card-body pt-1 pb-0">
+                    <p class="h6 text-center" style="font-weight: 900;">{{this.key}}</p>
+                    <p class="h3 text-center" style="font-weight: 900;font-family: monospace ;color:#414549">{{this.value}}</p>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+{{/if}}
+
+{{#if result}}
+    <div class="row mt-3">
+        <h4 class="col-12">Resultados ({{count}})</h4>
+        <table class="table table-sm table-bordeles">
+            <tr>
+                <th>Peso</th>
+                <th>Fecha</th>
+                <th>Maquina</th>
+                <th>Producto</th>
+                <th>Materia</th>
+            </tr>
+            {{#each result}}
+                <tr>
+                    <td>{{this.kg}}.{{this.gr}}</td>
+                    <td>{{this.date}}</td>
+                    <td>{{this.machineReference.name}}</td>
+                    <td>{{this.productReference.name}}</td>
+                    <td>{{this.rawmatterReference.name}}</td>
+                </tr>
+            {{/each}}
+        </table>
+    </div>
+{{/if}}
+
+</div>

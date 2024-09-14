@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseController_1 = __importDefault(require("../BaseController"));
+const StaticticsTransaction_1 = __importDefault(require("../../models/statictics/StaticticsTransaction"));
 class StaticticsController extends BaseController_1.default {
     // estadisticas por year
     APIStaticsForYear(req, res) {
@@ -27,8 +28,37 @@ class StaticticsController extends BaseController_1.default {
             return res.json({ body: [] });
         });
     }
+    APIAPIStaticsObjectYear(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const year = StaticticsTransaction_1.default.getYear();
+            const type = req.query.type ? req.query.type : `Transaction`;
+            const resultPromise = StaticticsTransaction_1.default.getForYear({ limit: 10, year, type });
+            const label = ['En', 'Fe', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            const series = [];
+            const result = yield resultPromise;
+            result.forEach(item => {
+                const data = [
+                    item.total_month_1,
+                    item.total_month_2,
+                    item.total_month_3,
+                    item.total_month_4,
+                    item.total_month_5,
+                    item.total_month_6,
+                    item.total_month_7,
+                    item.total_month_8,
+                    item.total_month_9,
+                    item.total_month_10,
+                    item.total_month_11,
+                    item.total_month_12,
+                ];
+                series.push({ data, name: item.objectName });
+            });
+            return res.json({ label, series });
+        });
+    }
     LoadRoutes() {
         this.router.get(`/api/statictics/foryear`, this.APIStaticsForYear);
+        this.router.get(`/api/statictics/generic`, this.APIAPIStaticsObjectYear);
         return this.router;
     }
 }

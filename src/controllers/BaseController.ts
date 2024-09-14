@@ -36,7 +36,6 @@ class BaseController {
     public async StartStaticticsForYear(req: Request, res: Response) {
         const date = new Date();
         const year = date.getFullYear();
-        console.log(year);
 
         // const result = await UserModel.CreateStatictisForYear({ year });
 

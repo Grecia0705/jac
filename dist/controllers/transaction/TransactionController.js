@@ -18,6 +18,7 @@ const TransactionModel_1 = __importDefault(require("../../models/transacction/Tr
 const CategoryModel_1 = __importDefault(require("../../models/transacction/CategoryModel"));
 const TypeModel_1 = __importDefault(require("../../models/transacction/TypeModel"));
 const var_1 = require("../../var");
+const StaticticsTransaction_1 = __importDefault(require("../../models/statictics/StaticticsTransaction"));
 const TransactionModel = new TransactionModel_1.default;
 class TransactionController extends BaseController_1.default {
     constructor() {
@@ -72,6 +73,7 @@ class TransactionController extends BaseController_1.default {
             try {
                 const user = req.user;
                 const { categoryId, date, mount, typeId, description } = req.body;
+                const categoryPromise = CategoryModel_1.default.GetCategoryById({ id: categoryId });
                 const data = {
                     description,
                     categoryId,
@@ -80,8 +82,9 @@ class TransactionController extends BaseController_1.default {
                     typeId,
                     createId: user.userId,
                 };
-                console.log(data);
                 yield TransactionModel.Create({ data });
+                const category = yield categoryPromise;
+                yield StaticticsTransaction_1.default.conectOrCreate({ name: `${category === null || category === void 0 ? void 0 : category.name}`, num: data.mount });
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(`/transaction`);
             }

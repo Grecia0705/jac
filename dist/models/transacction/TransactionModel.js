@@ -20,7 +20,16 @@ class TransactionModel extends BaseModel_1.default {
     Create(_a) {
         return __awaiter(this, arguments, void 0, function* ({ data }) {
             this.StartPrisma();
-            const result = this.prisma.transaction.create({ data });
+            const result = this.prisma.transaction.create({
+                data: {
+                    date: data.date,
+                    mount: data.mount,
+                    createId: data.createId,
+                    description: data.description,
+                    categoryReference: { connect: { transactionCategoryId: data.categoryId } },
+                    typeReference: { connect: { transactionTypeId: data.categoryId } },
+                }
+            });
             this.DistroyPrisma();
             return result;
         });
@@ -78,6 +87,23 @@ class TransactionModel extends BaseModel_1.default {
             this.prisma.transaction.update({ data: { delete_at: true }, where: { transactionId: id } });
             this.DistroyPrisma();
             return null;
+        });
+    }
+    ReportTransaction(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ skip, take, filter }) {
+            this.StartPrisma();
+            const result = yield this.prisma.transaction.findMany({
+                where: filter,
+                skip,
+                take,
+                include: {
+                    categoryReference: true,
+                    typeReference: true
+                }
+            });
+            const count = yield this.prisma.transaction.count({ where: filter });
+            this.DistroyPrisma();
+            return { result, count };
         });
     }
 }

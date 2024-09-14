@@ -15,6 +15,7 @@ import Rawmatter from "./controllers/control/rawmatter/RawmatterController";
 import Machine from "./controllers/control/product/ProductController";
 import Product from "./controllers/control/machine/MachineControl";
 import Stock from "./controllers/stock/StockController";
+import Report from "./controllers/report/ReporController";
 import TransactionType from "./controllers/transaction/type/TypeControl";
 import TransactionCategory from "./controllers/transaction/category/CategoryController";
 import Transaction from "./controllers/transaction/TransactionController";
@@ -77,6 +78,9 @@ app.use(Product.LoadRoutes());
 app.use(Rawmatter.LoadRoutes());
 app.use(Control.LoadRoutes());
 app.use(Stock.LoadRoutes());
+app.use(Report.LoadRouters());
+
+app.use(APIStattictics.LoadRoutes());
 
 app.use(TransactionType.LoadRoutes());
 app.use(TransactionCategory.LoadRoutes());

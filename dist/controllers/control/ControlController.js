@@ -19,6 +19,7 @@ const RawmatterModel_1 = __importDefault(require("../../models/control/rawmatter
 const MachineModel_1 = __importDefault(require("../../models/control/machine/MachineModel"));
 const ProductModel_1 = __importDefault(require("../../models/control/product/ProductModel"));
 const var_1 = require("../../var");
+const StaticticsTransaction_1 = __importDefault(require("../../models/statictics/StaticticsTransaction"));
 class ControlController extends BaseController_1.default {
     constructor() {
         super();
@@ -94,8 +95,9 @@ class ControlController extends BaseController_1.default {
                     rawmatterId,
                     createId: user.userId,
                 };
-                console.log(data);
-                // return res.redirect(`/control/list`);
+                const machinePromise = MachineModel_1.default.GetById({ id: data.machineId });
+                const producPromise = ProductModel_1.default.GetById({ id: data.productId });
+                // const rawmatterPromise = RawmatterModel.GetById({ id:data.rawmatterId });
                 const createPromise = ControlModel_1.default.Create({ data });
                 const raw = yield RawmatterModel_1.default.GetById({ id: data.rawmatterId });
                 if (raw != null) {
@@ -109,8 +111,14 @@ class ControlController extends BaseController_1.default {
                         kg: raw.gr,
                         name: raw.name
                     };
+                    yield StaticticsTransaction_1.default.conectOrCreate({ name: `${raw.name}`, num: 1, type: `Rawmatter` });
                     yield RawmatterModel_1.default.Update({ id: raw.rawmatterId, data: UpdateRaw });
                 }
+                const machine = yield machinePromise;
+                const product = yield producPromise;
+                yield StaticticsTransaction_1.default.conectOrCreate({ name: `Control`, num: 1, type: `Control` });
+                yield StaticticsTransaction_1.default.conectOrCreate({ name: `${machine === null || machine === void 0 ? void 0 : machine.name}`, num: 1, type: `Machine` });
+                yield StaticticsTransaction_1.default.conectOrCreate({ name: `${product === null || product === void 0 ? void 0 : product.name}`, num: 1, type: `Product` });
                 yield createPromise;
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(`/control`);

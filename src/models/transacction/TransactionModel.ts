@@ -1,6 +1,7 @@
 import { connect } from "mongoose";
 import { TransactionCreate } from "../../type/transaction";
 import AbstractModel from "../BaseModel";
+import { Prisma } from "@prisma/client";
 
 class TransactionModel extends AbstractModel {
 
@@ -10,7 +11,16 @@ class TransactionModel extends AbstractModel {
 
     public async Create({ data }: { data: TransactionCreate }) {
         this.StartPrisma();
-        const result = this.prisma.transaction.create({ data });
+        const result = this.prisma.transaction.create({ 
+            data: {
+                date: data.date,
+                mount: data.mount,
+                createId: data.createId,
+                description: data.description,
+                categoryReference: { connect:{transactionCategoryId:data.categoryId} },
+                typeReference: { connect:{transactionTypeId:data.categoryId} },
+            }
+        });
         this.DistroyPrisma();
         return result;
     }
@@ -69,6 +79,22 @@ class TransactionModel extends AbstractModel {
         this.prisma.transaction.update({ data:{ delete_at:true }, where:{ transactionId:id }})
         this.DistroyPrisma();
         return null
+    }
+
+    public async ReportTransaction({skip,take,filter}:{skip:number,take:number,filter:Prisma.TransactionWhereInput}) {
+        this.StartPrisma();
+        const result = await this.prisma.transaction.findMany({
+            where: filter,
+            skip,
+            take,
+            include: {
+                categoryReference: true,
+                typeReference: true
+            }
+        });
+        const count = await this.prisma.transaction.count({ where: filter });
+        this.DistroyPrisma();
+        return {result, count};
     }
 }
 

@@ -20,9 +20,11 @@ const RawmatterController_1 = __importDefault(require("./controllers/control/raw
 const ProductController_1 = __importDefault(require("./controllers/control/product/ProductController"));
 const MachineControl_1 = __importDefault(require("./controllers/control/machine/MachineControl"));
 const StockController_1 = __importDefault(require("./controllers/stock/StockController"));
+const ReporController_1 = __importDefault(require("./controllers/report/ReporController"));
 const TypeControl_1 = __importDefault(require("./controllers/transaction/type/TypeControl"));
 const CategoryController_1 = __importDefault(require("./controllers/transaction/category/CategoryController"));
 const TransactionController_1 = __importDefault(require("./controllers/transaction/TransactionController"));
+const Statictics_1 = __importDefault(require("./controllers/API/Statictics"));
 require("./config/passport");
 // init
 const app = (0, express_1.default)();
@@ -73,6 +75,8 @@ app.use(MachineControl_1.default.LoadRoutes());
 app.use(RawmatterController_1.default.LoadRoutes());
 app.use(ControlController_1.default.LoadRoutes());
 app.use(StockController_1.default.LoadRoutes());
+app.use(ReporController_1.default.LoadRouters());
+app.use(Statictics_1.default.LoadRoutes());
 app.use(TypeControl_1.default.LoadRoutes());
 app.use(CategoryController_1.default.LoadRoutes());
 app.use(TransactionController_1.default.LoadRoutes());

@@ -24,8 +24,8 @@ class TypeController extends BaseController_1.default {
         return __awaiter(this, void 0, void 0, function* () {
             const pag = req.query.pag | 0;
             const limit = req.query.limit | 10;
-            const type = TypeModel_1.default.GetPagination({ pag, limit });
-            const countPromise = TypeModel_1.default.CountAll();
+            const type = TypeModel_1.default.GetPaginationType({ pag, limit });
+            const countPromise = TypeModel_1.default.CountTypeAll();
             console.log(type);
             const Params = {
                 list: yield type,

@@ -7,6 +7,7 @@ import TransactionInstance from "../../models/transacction/TransactionModel";
 import CategoryModel from "../../models/transacction/CategoryModel";
 import TypeModel from "../../models/transacction/TypeModel";
 import { Languaje, TypesFlash } from "../../var";
+import StaticticsTransaction from "../../models/statictics/StaticticsTransaction";
 
 const TransactionModel = new TransactionInstance;
 
@@ -68,7 +69,8 @@ class TransactionController extends BaseController {
         try {
             const user = req.user as UserCompleted;
             const {categoryId,date,mount,typeId,description} = req.body;
-
+            const categoryPromise = CategoryModel.GetCategoryById({ id:categoryId }); 
+            
             const data: TransactionCreate = {
                 description,
                 categoryId,
@@ -77,8 +79,10 @@ class TransactionController extends BaseController {
                 typeId,
                 createId:user.userId,
             };
-            console.log(data);
             await TransactionModel.Create({data});
+
+            const category = await categoryPromise;
+            await StaticticsTransaction.conectOrCreate({ name:`${category?.name}`,num:data.mount });
 
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(`/transaction`);

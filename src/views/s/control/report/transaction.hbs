@@ -1,0 +1,92 @@
+<div class="container">
+    <div class="row">
+        <form action="/report/transaction" method="GET" class="col-12 card">
+            <div class="card-body">
+
+                <label class="w-100">
+                    <span>Fecha</span>
+                    <input type="date" name="date" class="form-control w-full" />
+                </label>
+
+                <label class="w-100">
+                    <span>Mes</span>
+                    <select type="text" name="month" class="form-control w-full">
+                        <option value="" selected>seleccione un mes</option>
+                        <option value="01">Enero</option>
+                        <option value="02">Febrero</option>
+                        <option value="03">Marzo</option>
+                        <option value="04">Abril</option>
+                        <option value="05">Mayo</option>
+                        <option value="06">Junio</option>
+                        <option value="07">Julio</option>
+                        <option value="08">Agosto</option>
+                        <option value="09">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                </label>
+                
+                <label class="w-100">
+                    <span>Tipo</span>
+                    <select type="text" name="type" class="form-control w-full">
+                        <option value="" selected>seleccione un estado</option>
+                        {{#each type}}
+                            <option value="{{this.transactionTypeId}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </label>
+
+                <label class="w-100">
+                    <span>Categoria</span>
+                    <select type="text" name="category" class="form-control w-full">
+                        <option value="" selected>seleccione un estado</option>
+                        {{#each category}}
+                            <option value="{{this.transactionCategoryId}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </label>
+
+                <input type="submit" value="Generar Reporte" class="btn btn-primary" />
+            </div>            
+        </form>
+    </div>
+
+
+{{#if filter}}
+    <div class="row mt-3">
+        <h4 class="col-12">Filtros</h4>
+        {{#each filter}}
+            <div class="card col-12 col-md-4 col-lg-3">
+                <div class="card-body pt-1 pb-0">
+                    <p class="h6 text-center" style="font-weight: 900;">{{this.key}}</p>
+                    <p class="h3 text-center" style="font-weight: 900;font-family: monospace ;color:#414549">{{this.value}}</p>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+{{/if}}
+
+{{#if result}}
+    <div class="row mt-3">
+        <h4 class="col-12">Resultados ({{count}})</h4>
+        <table class="table table-sm table-bordeles">
+            <tr>
+                <td><b style="font-weight: 900;">Fecha</b></td>
+                <td><b style="font-weight: 900;">Nombre</b></td>
+                <td><b style="font-weight: 900;">Estado</b></td>
+                <td><b style="font-weight: 900;">Caracter</b></td>
+            </tr>
+            {{#each result}}
+                <tr>
+                    <td>{{this.admin_date}}</td>
+                    <td>{{this.fullname}}</td>
+                    <td>{{this.admin_status}}</td>
+                    <td>{{this.event_character}}</td>
+                </tr>
+            {{/each}}
+        </table>
+    </div>
+{{/if}}
+
+</div>

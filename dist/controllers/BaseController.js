@@ -47,7 +47,6 @@ class BaseController {
         return __awaiter(this, void 0, void 0, function* () {
             const date = new Date();
             const year = date.getFullYear();
-            console.log(year);
             // const result = await UserModel.CreateStatictisForYear({ year });
             // return res.json({ body:result });
         });

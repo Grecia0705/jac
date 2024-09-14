@@ -51,6 +51,10 @@ class ControlModel extends BaseModel_1.default {
                     kg: data.kg,
                     // machineId: data.machineId,
                     // rawmatterId: data.rawmatterId
+                    createReference: { connect: { userId: data.createId } },
+                    machineReference: { connect: { machineId: data.machineId } },
+                    rawmatterReference: { connect: { rawmatterId: data.rawmatterId } },
+                    productReference: { connect: { productId: data.productId } }
                 }, where: { controlId: id } });
             this.DistroyPrisma();
             return result;
@@ -76,12 +80,11 @@ class ControlModel extends BaseModel_1.default {
         return __awaiter(this, arguments, void 0, function* ({ pag, limit }) {
             this.StartPrisma();
             const result = yield this.prisma.control.findMany({
-                // include: {
-                //     // createReference: true,
-                //     // machineReference: true,
-                //     // productReference: true,
-                //     // rawmatterReference: true,
-                // },
+                include: {
+                    machineReference: true,
+                    productReference: true,
+                    rawmatterReference: true,
+                },
                 skip: pag * limit,
                 take: limit,
             });
@@ -96,34 +99,58 @@ class ControlModel extends BaseModel_1.default {
                 where: {
                     controlId: id,
                     delete_at: false,
+                },
+                include: {
+                    createReference: true,
+                    machineReference: true,
+                    productReference: true,
+                    rawmatterReference: true
                 }
             });
             if (!result) {
                 return null;
             }
-            const create = this.prisma.user.findFirst({ where: { userId: result.createId } });
-            const machine = this.prisma.machine.findFirst({ where: { machineId: result.machineId } });
-            const product = this.prisma.product.findFirst({ where: { productId: result.productId } });
-            const rawmatter = this.prisma.rawmater.findFirst({ where: { rawmatterId: result.rawmatterId } });
-            const control = {
-                controlId: result.controlId,
-                date: result.date,
-                gr: result.gr,
-                kg: result.kg,
-                createId: result.createId,
-                machineId: result.machineId,
-                productId: result.productId,
-                rawmatterId: result.rawmatterId,
-                create_at: result.create_at.toString(),
-                update_at: result.update_at.toString(),
-                delete_at: result.delete_at ? result.delete_at.toString() : ``,
-                createReference: yield create,
-                machineReference: yield machine,
-                productReference: yield product,
-                rawmatterReference: yield rawmatter,
-            };
+            // const create = this.prisma.user.findFirst({ where:{ userId:result.createId } });
+            // const machine = this.prisma.machine.findFirst({ where:{ machineId:result.machineId } });
+            // const product = this.prisma.product.findFirst({ where:{ productId:result.productId } });
+            // const rawmatter = this.prisma.rawmater.findFirst({ where:{ rawmatterId:result.rawmatterId } });
+            // const control:CompletedControl = {
+            //     controlId: result.controlId,
+            //     date: result.date,
+            //     gr: result.gr,
+            //     kg: result.kg,
+            //     createId: result.createId,
+            //     machineId: result.machineId,
+            //     productId: result.productId,
+            //     rawmatterId: result.rawmatterId,
+            //     create_at: result.create_at.toString(),
+            //     update_at: result.update_at.toString(),
+            //     delete_at: result.delete_at ? result.delete_at.toString() : ``,
+            //     createReference: await create,
+            //     machineReference: await machine,
+            //     productReference: await product,
+            //     rawmatterReference: await rawmatter,
+            // } 
             this.DistroyPrisma();
-            return control;
+            return result;
+        });
+    }
+    ReportEvent(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ filter, skip, take }) {
+            this.StartPrisma();
+            const result = yield this.prisma.control.findMany({
+                where: filter,
+                skip,
+                take,
+                include: {
+                    machineReference: true,
+                    productReference: true,
+                    rawmatterReference: true,
+                }
+            });
+            const count = yield this.prisma.control.count({ where: filter });
+            this.DistroyPrisma();
+            return { result, count };
         });
     }
 }
