@@ -11,7 +11,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./deploy.db"
+  url      = "file:./main.db"
 }
 
 model App {
@@ -141,7 +141,7 @@ model Transaction {
   categoryId            String
   categoryReference     TransactionCategory     @relation(fields: [categoryId], references: [transactionCategoryId])
   typeId                String
-  typeReference     TransactionType     @relation(fields: [typeId], references: [transactionTypeId])
+  typeReference         TransactionType     @relation(fields: [typeId], references: [transactionTypeId])
 
   createId              String
 
@@ -200,4 +200,3 @@ model StaticticsObjectsYear {
   total_month_11              Int                 @default(0)
   total_month_12              Int                 @default(0)
 }
-

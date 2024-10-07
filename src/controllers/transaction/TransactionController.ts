@@ -82,7 +82,9 @@ class TransactionController extends BaseController {
             await TransactionModel.Create({data});
 
             const category = await categoryPromise;
+            // console.log(category?.name, data.mount);
             await StaticticsTransaction.conectOrCreate({ name:`${category?.name}`,num:data.mount });
+            await StaticticsTransaction.conectOrCreate({ name:`Transaction`,num:1, type:`TransactionMount` });
 
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(`/transaction`);

@@ -52,43 +52,17 @@
         </form>
     </div>
 
-
-{{#if filter}}
-    <div class="row mt-3">
-        <h4 class="col-12">Filtros</h4>
-        {{#each filter}}
-            <div class="card col-12 col-md-4 col-lg-3">
-                <div class="card-body pt-1 pb-0">
-                    <p class="h6 text-center" style="font-weight: 900;">{{this.key}}</p>
-                    <p class="h3 text-center" style="font-weight: 900;font-family: monospace ;color:#414549">{{this.value}}</p>
-                </div>
-            </div>
-        {{/each}}
-    </div>
-{{/if}}
-
-{{#if result}}
-    <div class="row mt-3">
-        <h4 class="col-12">Resultados ({{count}})</h4>
-        <table class="table table-sm table-bordeles">
-            <tr>
-                <td><b style="font-weight: 900;">Fecha</b></td>
-                <td><b style="font-weight: 900;">Descripcion</b></td>
-                <td><b style="font-weight: 900;">Monto</b></td>
-                <td><b style="font-weight: 900;">Categoria</b></td>
-                <td><b style="font-weight: 900;">Tipo</b></td>
-            </tr>
-            {{#each result}}
-                <tr>
-                    <td>{{this.date}}</td>
-                    <td class="text-xs">{{this.description}}</td>
-                    <td>{{this.mount}}</td>
-                    <td>{{this.categoryReference.name}}</td>
-                    <td>{{this.typeReference.name}}</td>
-                </tr>
+    {{#if file}}
+        <h4 class="mt-4">Filtros</h4>
+        <ul>
+            <li>Resutlados: {{count}}</li>
+            {{#each filter}}
+                <li>{{this}}</li>
             {{/each}}
-        </table>
-    </div>
-{{/if}}
+        </ul>
+        <div class="row mt-3">
+            <a href="{{file.download}}" target="_blank" class="btn btn-danger">Descargar reporte</a>
+        </div>
+    {{/if}}
 
 </div>

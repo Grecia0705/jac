@@ -9,6 +9,7 @@
             <a href="/transaction/create" class="btn btn-primary">crear</a>
         </div>
     </div>
+
     <div class="row">
         {{#if list}}
             <div class="table-responsive">
@@ -56,13 +57,16 @@
         {{/if}}
     </div>
 
-    <row>
-        <div class="card">
+    <div class="row">
+        <div class="card col-12">
             <div class="card-body">
                 <div class="widget-content">
                     <div id="staticticsTransactions"></div>
                 </div>
             </div>
         </div>
-    </row>
+    </div>
+
+    {{> statictics/transaction }}
+
 </div>

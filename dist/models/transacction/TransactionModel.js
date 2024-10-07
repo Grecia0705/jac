@@ -27,7 +27,7 @@ class TransactionModel extends BaseModel_1.default {
                     createId: data.createId,
                     description: data.description,
                     categoryReference: { connect: { transactionCategoryId: data.categoryId } },
-                    typeReference: { connect: { transactionTypeId: data.categoryId } },
+                    typeReference: { connect: { transactionTypeId: data.typeId } },
                 }
             });
             this.DistroyPrisma();
@@ -63,6 +63,14 @@ class TransactionModel extends BaseModel_1.default {
         return __awaiter(this, void 0, void 0, function* () {
             this.StartPrisma();
             const result = yield this.prisma.transactionType.count();
+            this.DistroyPrisma();
+            return result;
+        });
+    }
+    CountAllBy(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ filter }) {
+            this.StartPrisma();
+            const result = yield this.prisma.transaction.count({ where: filter });
             this.DistroyPrisma();
             return result;
         });

@@ -72,27 +72,16 @@
     </div>
 {{/if}}
 
-{{#if result}}
+ {{#if file}}
+    <h4 class="mt-4">Filtros</h4>
+    <ul>
+        <li>Resutlados: {{count}}</li>
+        {{#each filter}}
+            <li>{{this}}</li>
+        {{/each}}
+    </ul>
     <div class="row mt-3">
-        <h4 class="col-12">Resultados ({{count}})</h4>
-        <table class="table table-sm table-bordeles">
-            <tr>
-                <th>Peso</th>
-                <th>Fecha</th>
-                <th>Maquina</th>
-                <th>Producto</th>
-                <th>Materia</th>
-            </tr>
-            {{#each result}}
-                <tr>
-                    <td>{{this.kg}}.{{this.gr}}</td>
-                    <td>{{this.date}}</td>
-                    <td>{{this.machineReference.name}}</td>
-                    <td>{{this.productReference.name}}</td>
-                    <td>{{this.rawmatterReference.name}}</td>
-                </tr>
-            {{/each}}
-        </table>
+        <a href="{{file.download}}" target="_blank" class="btn btn-danger">Descargar reporte</a>
     </div>
 {{/if}}
 

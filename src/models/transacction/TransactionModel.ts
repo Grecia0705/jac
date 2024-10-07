@@ -18,7 +18,7 @@ class TransactionModel extends AbstractModel {
                 createId: data.createId,
                 description: data.description,
                 categoryReference: { connect:{transactionCategoryId:data.categoryId} },
-                typeReference: { connect:{transactionTypeId:data.categoryId} },
+                typeReference: { connect:{transactionTypeId:data.typeId} },
             }
         });
         this.DistroyPrisma();
@@ -57,6 +57,13 @@ class TransactionModel extends AbstractModel {
     public async CountAll() {
         this.StartPrisma();
         const result = await this.prisma.transactionType.count();
+        this.DistroyPrisma();
+        return result;
+    } 
+
+    public async CountAllBy({filter}:{filter:Prisma.TransactionWhereInput}) {
+        this.StartPrisma();
+        const result = await this.prisma.transaction.count({where:filter});
         this.DistroyPrisma();
         return result;
     } 

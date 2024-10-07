@@ -76,6 +76,14 @@ class ControlModel extends BaseModel_1.default {
             return result;
         });
     }
+    CountAllBy(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ filter }) {
+            this.StartPrisma();
+            const result = yield this.prisma.control.count({ where: filter });
+            this.DistroyPrisma();
+            return result;
+        });
+    }
     GetPagination(_a) {
         return __awaiter(this, arguments, void 0, function* ({ pag, limit }) {
             this.StartPrisma();

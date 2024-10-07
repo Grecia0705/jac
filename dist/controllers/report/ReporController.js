@@ -21,6 +21,7 @@ const auth_1 = require("../../middleware/auth");
 const MachineModel_1 = __importDefault(require("../../models/control/machine/MachineModel"));
 const ProductModel_1 = __importDefault(require("../../models/control/product/ProductModel"));
 const RawmatterModel_1 = __importDefault(require("../../models/control/rawmatter/RawmatterModel"));
+const GeneratePDFkit_1 = require("../../models/pdf/GeneratePDFkit");
 const TransactionModel = new TransactionModel_1.default();
 class ReportController extends BaseController_1.default {
     HandleControlReport(req, res) {
@@ -61,21 +62,43 @@ class ReportController extends BaseController_1.default {
                 renderFilter.push({ key: `Fecha`, value: `${date}` });
                 filter.push({ date: { equals: `${date}` } });
             }
+            const fitlerRender = [];
+            const count = yield ControlModel_1.default.CountAllBy({ filter: { AND: filter } });
+            let pagTake = 20;
+            const headers = [``, `Maquina`, `Materia`, `Producto`, `Peso`];
+            const rows = [];
             const machineList = yield machinePromise;
             const productList = yield productPromise;
             const rawmatterList = yield rawmatterPromise;
-            const result = yield ControlModel_1.default.ReportEvent({
-                filter: {
-                    AND: filter
-                },
-                skip,
-                take
+            do {
+                const result = yield ControlModel_1.default.ReportEvent({
+                    filter: {
+                        AND: filter
+                    },
+                    skip: pagTake - 20,
+                    take: pagTake
+                });
+                result.result.forEach((item, i) => {
+                    rows.push([
+                        `${i + 1}`,
+                        `${item.machineReference.name}`,
+                        `${item.rawmatterReference.name}`,
+                        `${item.productReference.name}`,
+                        `${item.kg}.${item.gr}`
+                    ]);
+                });
+            } while (count > pagTake);
+            const pdf = yield (0, GeneratePDFkit_1.pushPdf)({
+                headers,
+                rows,
+                title: `Reporte`,
+                filter: fitlerRender,
+                count
             });
-            console.log(result.result);
             return res.render(`s/report/control.hbs`, {
-                result: result.result,
-                count: result.count,
-                filter: renderFilter,
+                file: pdf,
+                filter: fitlerRender,
+                count,
                 machineList,
                 productList,
                 rawmatterList
@@ -88,47 +111,64 @@ class ReportController extends BaseController_1.default {
             const CategoryPromise = CategoryModel_1.default.GetPaginationCategory({ pag: 0, limit: 50 });
             const skip = req.query.skip ? Number(req.query.skip) : 0;
             const take = req.query.take ? Number(req.query.take) : 50;
-            const date = req.query.date ? `${req.query.date}` : ``;
-            const month = req.query.month ? `${req.query.month}` : ``;
-            const type = req.query.type ? `${req.query.type}` : ``;
-            const category = req.query.category ? `${req.query.category}` : ``;
-            const renderFilter = [];
+            // const status = req.query.status;
+            const date = req.query.date;
+            const type = req.query.type;
+            const category = req.query.category;
+            const fitlerRender = [];
             const filter = [];
-            if (type !== ``) {
-                const typePromise = yield TypeModel_1.default.GetTypeById({ id: type });
-                if (typePromise) {
-                    renderFilter.push({ key: `Tipo`, value: `${typePromise.name}` });
-                    filter.push({ typeId: typePromise.transactionTypeId });
+            if (category && type) {
+                const typeResult = yield TypeModel_1.default.GetTypeById({ id: type });
+                const categoryResult = yield CategoryModel_1.default.GetCategoryById({ id: category });
+                filter.push({ AND: [{ categoryId: category }, { typeId: type }] });
+                fitlerRender.push(`Tipo: ${typeResult === null || typeResult === void 0 ? void 0 : typeResult.name}`);
+                fitlerRender.push(`Categoria: ${categoryResult === null || categoryResult === void 0 ? void 0 : categoryResult.name}`);
+            }
+            else {
+                if (type) {
+                    const result = yield TypeModel_1.default.GetTypeById({ id: type });
+                    filter.push({ typeId: type });
+                    fitlerRender.push(`Tipo: ${result === null || result === void 0 ? void 0 : result.name}`);
+                }
+                else {
+                    fitlerRender.push(`Tipo: TODOS`);
+                }
+                if (category) {
+                    const result = yield CategoryModel_1.default.GetCategoryById({ id: category });
+                    filter.push({ categoryId: category });
+                    fitlerRender.push(`Categoria: ${result === null || result === void 0 ? void 0 : result.name}`);
+                }
+                else {
+                    fitlerRender.push(`Categoria: TODOS`);
                 }
             }
-            if (category !== ``) {
-                const categoryPromise = yield CategoryModel_1.default.GetCategoryById({ id: category });
-                console.log(categoryPromise);
-                if (categoryPromise) {
-                    renderFilter.push({ key: `Categoria`, value: `${categoryPromise.name}` });
-                    filter.push({ categoryId: categoryPromise.transactionCategoryId });
-                }
-            }
-            if (month !== ``) {
-                renderFilter.push({ key: `Mes`, value: `${month}` });
-                filter.push({ date: { contains: `-${month}-` } });
-            }
-            if (date !== ``) {
-                renderFilter.push({ key: `Fecha`, value: `${date}` });
-                filter.push({ date: { equals: date } });
-            }
-            const result = yield TransactionModel.ReportTransaction({
-                filter: {
-                    AND: filter
-                },
-                skip,
-                take,
+            const count = yield TransactionModel.CountAllBy({ filter: { AND: filter } });
+            let pagTake = 20;
+            const headers = [``, `Descripción`, `Monto`, `Fecha`];
+            const rows = [];
+            let i = 0;
+            do {
+                const result = yield TransactionModel.ReportTransaction({
+                    filter: filter.length > 1 ? { AND: filter } : filter[0],
+                    skip: pagTake - 20,
+                    take: pagTake
+                });
+                result.result.forEach((item, i) => {
+                    rows.push([i.toString(), `${item.description}`, `${item.mount}`, `${item.date}`]);
+                });
+                i++;
+            } while (count > pagTake);
+            const pdf = yield (0, GeneratePDFkit_1.pushPdf)({
+                headers,
+                rows,
+                title: `Reporte`,
+                filter: fitlerRender,
+                count
             });
-            console.log(result.result);
             return res.render(`s/report/transaction.hbs`, {
-                result: result.result,
-                count: result.count,
-                filter: renderFilter,
+                file: pdf,
+                filter: fitlerRender,
+                count,
                 type: yield TypePromise,
                 category: yield CategoryPromise,
             });

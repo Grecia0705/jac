@@ -123,3 +123,9 @@ if (rawmatter) GenerateStatictics({
     id:"#staticticsYearRawmatter"
 });
 
+const transactionMount = document.getElementById("staticticsTransactionsCount");
+if (transactionMount) GenerateStatictics({
+    element:transactionMount, 
+    url:`/api/statictics/generic/?type=TransactionMount`,
+    id:"#staticticsTransactionsCount"
+});

@@ -84,7 +84,9 @@ class TransactionController extends BaseController_1.default {
                 };
                 yield TransactionModel.Create({ data });
                 const category = yield categoryPromise;
+                // console.log(category?.name, data.mount);
                 yield StaticticsTransaction_1.default.conectOrCreate({ name: `${category === null || category === void 0 ? void 0 : category.name}`, num: data.mount });
+                yield StaticticsTransaction_1.default.conectOrCreate({ name: `Transaction`, num: 1, type: `TransactionMount` });
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(`/transaction`);
             }
