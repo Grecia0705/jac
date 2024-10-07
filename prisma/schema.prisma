@@ -11,7 +11,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./main.db"
+  url      = "file:./dev.db"
 }
 
 model App {
@@ -102,19 +102,20 @@ model Control {
   kg                  Int
   gr                  Int
 
-  productId           String
-  rawmatterId         String
-  machineId           String
-  createId            String      
-
-
   create_at       DateTime      @default(now())
   update_at       DateTime      @default(now()) @updatedAt
   delete_at       Boolean       @default(false)
 
+  createId            String
   createReference     User        @relation(fields: [controlId],    references: [userId], onUpdate: Cascade, onDelete: Cascade)
+  
+  productId           String
   productReference    Product     @relation(fields: [productId],    references: [productId])
+
+  machineId           String
   machineReference    Machine     @relation(fields: [machineId],    references: [machineId])
+
+  rawmatterId         String
   rawmatterReference  Rawmater    @relation(fields: [rawmatterId],  references: [rawmatterId])
 }
 

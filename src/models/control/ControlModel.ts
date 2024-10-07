@@ -17,9 +17,9 @@ class ControlModel extends AbstractModel {
                     date: data.date,
                     gr: data.gr,
                     kg: data.kg,
-                    machineId: data.machineId,
-                    productId: data.productId,
-                    rawmatterId: data.rawmatterId
+                    machineReference: { connect:{machineId:data.machineId} },
+                    productReference: { connect:{productId:data.productId} },
+                    rawmatterReference: { connect:{rawmatterId:data.rawmatterId} },
                 }
              });
             this.DistroyPrisma();
