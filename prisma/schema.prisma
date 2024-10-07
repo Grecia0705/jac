@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -39,7 +38,7 @@ model User {
   machineList     Machine[]
   productList     Product[]
   rawmmaterList   Rawmater[]
-  controlList     Control[]
+  controls       Control[]
   stockList       Stock[]
 
   transactionCateogryList TransactionCategory[]
@@ -54,7 +53,7 @@ model Machine {
   createId        String
   createReference User    @relation(fields: [createId], references: [userId], onDelete: Cascade)
 
-  controlList     Control[]
+  controls       Control[]
 
   create_at       DateTime      @default(now())
   update_at       DateTime      @default(now()) @updatedAt
@@ -69,7 +68,7 @@ model Product {
   createId        String
   createReference User    @relation(fields: [createId], references: [userId], onDelete: Cascade)
 
-  controlList     Control[]
+  controls       Control[]
 
   create_at       DateTime      @default(now())
   update_at       DateTime      @default(now()) @updatedAt
@@ -88,7 +87,7 @@ model Rawmater {
   code            String
   gr              Int
 
-  controlList     Control[]
+  controls       Control[]
 
   create_at       DateTime      @default(now())
   update_at       DateTime      @default(now()) @updatedAt
@@ -107,7 +106,7 @@ model Control {
   delete_at       Boolean       @default(false)
 
   createId            String
-  createReference     User        @relation(fields: [controlId],    references: [userId], onUpdate: Cascade, onDelete: Cascade)
+  createReference     User        @relation(fields: [createId],    references: [userId])
   
   productId           String
   productReference    Product     @relation(fields: [productId],    references: [productId])

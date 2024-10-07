@@ -10,18 +10,19 @@ class ControlModel extends AbstractModel {
 
     public async Create({ data }: {data:ControlCreate}) {
         try {
+            console.log(data);
             this.StartPrisma();
             const result = await this.prisma.control.create({ 
                 data: {
-                    createId: data.createId,
                     date: data.date,
                     gr: data.gr,
                     kg: data.kg,
-                    machineReference: { connect:{machineId:data.machineId} },
-                    productReference: { connect:{productId:data.productId} },
-                    rawmatterReference: { connect:{rawmatterId:data.rawmatterId} },
+                    createReference: { connect:{ userId:data.createId } },
+                    machineReference: { connect:{ machineId:data.machineId } },
+                    productReference: { connect:{ productId:data.productId } },
+                    rawmatterReference: { connect:{ rawmatterId:data.rawmatterId } },
                 }
-             });
+            })
             this.DistroyPrisma();
             return result;
         } catch (error: any) {
