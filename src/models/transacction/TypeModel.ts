@@ -7,16 +7,34 @@ class TypeModel extends TrasactionModel {
         super();
     }
 
-    public async CreateType({ data }: { data: TypeCreate }) {
+    public async CreateType({ data,description,userId }: { data: TypeCreate,description:string,userId: string }) {
         this.StartPrisma();
         const result = this.prisma.transactionType.create({ data });
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `transaction.type`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return result;
     }
 
-    public async UpdateType({ data, id }: {data: TypeCreate, id: string}) {
+    public async UpdateType({ data, id,description,userId }: {data: TypeCreate, id: string,description:string,userId: string}) {
         this.StartPrisma();
         const result = this.prisma.transactionType.update({ data, where:{transactionTypeId:id} });
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `transaction.type`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return result;
     }
@@ -55,9 +73,18 @@ class TypeModel extends TrasactionModel {
         return result;
     } 
 
-    public async AtDeleteType({id}:{id:string}) {
+    public async AtDeleteType({id,description,userId}:{id:string,description:string,userId: string}) {
         this.StartPrisma();
-        this.prisma.transactionType.update({ data:{ delete_at: true }, where:{transactionTypeId:id} })
+        this.prisma.transactionType.update({ data:{ delete_at: true }, where:{transactionTypeId:id} });
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `transaction.type`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return null
     }

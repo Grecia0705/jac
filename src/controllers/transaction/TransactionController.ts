@@ -79,7 +79,12 @@ class TransactionController extends BaseController {
                 typeId,
                 createId:user.userId,
             };
-            await TransactionModel.Create({data});
+            const categoryModel = await CategoryModel.GetCategoryById({ id:categoryId });
+            const type = await TypeModel.GetTypeById({ id:typeId });
+
+            const descriptionHts = `Creación de Movimiento, Fecha:${date} Monto:${mount} Descripción:${description} Categoria:${categoryModel?.name} Tipo:${type?.name}`;
+            
+            await TransactionModel.Create({data,description:descriptionHts,userId:user.userId});
 
             const category = await categoryPromise;
             // console.log(category?.name, data.mount);
@@ -110,7 +115,12 @@ class TransactionController extends BaseController {
                 typeId,
                 createId:user.userId,
             };
-            await TransactionModel.Update({ id, data });
+            
+            const category = await CategoryModel.GetCategoryById({ id:categoryId });
+            const type = await TypeModel.GetTypeById({ id:typeId });
+
+            const descriptionHts = `Actualización de Movimiento, Fecha:${date} Monto:${mount} Descripción:${description} Categoria:${category?.name} Tipo:${type?.name}`;
+            await TransactionModel.Update({ id, data,description:descriptionHts,userId:user.userId });
             
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(`/transaction`);
@@ -124,7 +134,8 @@ class TransactionController extends BaseController {
 
     public async AddDeleteAt(req: Request, res: Response) {
         const id = req.params.id;
-        const result = TransactionModel.AtDeleteTransaction({ id });
+        const user = req.user as any;
+        const result = TransactionModel.AtDeleteTransaction({ id,description:`Eliminación de Transacción`,userId:user.userId });
         req.flash(`succ`, `Transacción eliminada`);
         return res.redirect(`/transaction`);
     }

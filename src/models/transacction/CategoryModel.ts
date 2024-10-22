@@ -7,16 +7,34 @@ class CategoryModel extends TrasactionModel {
         super();
     }
 
-    public async CreateCategory({ data }: { data: CategoryCreate }) {
+    public async CreateCategory({ data,description,userId }: { data: CategoryCreate,description:string,userId: string }) {
         this.StartPrisma();
         const result = this.prisma.transactionCategory.create({ data });
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `transaction.model`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return result;
     }
 
-    public async UpdateCategory({ data, id }: {data: CategoryCreate, id: string}) {
+    public async UpdateCategory({ data, id,description,userId }: {data: CategoryCreate, id: string,description:string,userId: string}) {
         this.StartPrisma();
         const result = this.prisma.transactionCategory.update({ data, where:{transactionCategoryId:id} });
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `transaction.model`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return result;
     }
@@ -59,9 +77,18 @@ class CategoryModel extends TrasactionModel {
         return result;
     } 
 
-    public async AtDeleteCategory({id}:{id:string}) {
+    public async AtDeleteCategory({id,description,userId}:{id:string,description:string,userId: string}) {
         this.StartPrisma();
-        await this.prisma.transactionCategory.update({ data:{delete_at:true}, where:{transactionCategoryId:id} })
+        await this.prisma.transactionCategory.update({ data:{delete_at:true}, where:{transactionCategoryId:id} });
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `transaction.model`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return null
     }

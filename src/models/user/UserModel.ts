@@ -25,8 +25,9 @@ class UserModel extends AbstractModel {
     }
 
     // crea usuario
-    public async CreateUser({data, rol}:{data:UserCreate, rol?:string}) {
+    public async CreateUser({data, rol,description}:{data:UserCreate, rol?:string,description:string}) {
         this.StartPrisma();
+
         const result = await this.prisma.user.create({
             data: {
                 email:data.email,
@@ -37,6 +38,17 @@ class UserModel extends AbstractModel {
                 rol: rol ? rol : `ADMIN`
             }
         }); 
+
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: result.userId }
+            },
+            objectId: result.userId,
+            objectName: `user`,
+            objectReference: true,
+        });
+
         this.DistroyPrisma();
         // this.StaticticsUpdate({});
         return result;
@@ -53,6 +65,7 @@ class UserModel extends AbstractModel {
                 }
             }
         });
+        
         this.DistroyPrisma();
         return result;
     }
@@ -91,9 +104,18 @@ class UserModel extends AbstractModel {
     }
 
     // agrega eliminación de uaurio
-    public async AtDeleteUser({id}:{id:string}) {
+    public async AtDeleteUser({id,description}:{id:string,description:string}) {
         this.StartPrisma();
-        await this.prisma.user.update({ data:{delete_at:true}, where:{userId:id} })
+        await this.prisma.user.update({ data:{delete_at:true}, where:{userId:id} });
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: id }
+            },
+            objectId: id,
+            objectName: `user`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return null
     }

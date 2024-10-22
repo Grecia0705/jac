@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { compare, hash } from 'bcrypt';
 
 class AbstractModel {
@@ -17,6 +17,11 @@ class AbstractModel {
 
     async DistroyPrisma() {
         this.prisma.$disconnect();
+    }
+
+    async CreateHistory (data: Prisma.HistoryCreateInput) {
+        this.StartPrisma();
+        return this.prisma.history.create({ data });
     }
 
     // async CreateTransaction({data}: {data: TransactionCreate}) {

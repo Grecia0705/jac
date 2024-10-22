@@ -40,6 +40,7 @@ model User {
   rawmmaterList   Rawmater[]
   controls       Control[]
   stockList       Stock[]
+  history         History[]
 
   transactionCateogryList TransactionCategory[]
   transactionTypeList     TransactionType[]
@@ -199,4 +200,19 @@ model StaticticsObjectsYear {
   total_month_10              Int                 @default(0)
   total_month_11              Int                 @default(0)
   total_month_12              Int                 @default(0)
+}
+
+model History {
+  id                  String        @id         @default(uuid())
+
+  objectName          String?
+  objectId            String?
+  objectReference     Boolean?           @default(false)
+
+  userId              String        
+  userReference       User              @relation(fields: [userId], references: [userId])
+
+  description String
+
+  createAt                  DateTime @default(now())
 }

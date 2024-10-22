@@ -103,12 +103,18 @@ class ControlController extends BaseController {
                 createId:user.userId,                
             };
 
+            
+
             const machinePromise = MachineModel.GetById({ id:data.machineId });
             const producPromise = ProductModel.GetById({ id:data.productId });
+            const machine = await machinePromise;
+            const product = await producPromise;
+            const raw = await RawmatterModel.GetById({ id: data.rawmatterId });
+
             // const rawmatterPromise = RawmatterModel.GetById({ id:data.rawmatterId });
 
-            const createPromise = ControlModel.Create({data});
-            const raw = await RawmatterModel.GetById({ id: data.rawmatterId });
+            const descriptionHts = `Creación de Control: Fecha:${data} PESO:${kg}.${gr} Máquina:${machine?.name} Producto: ${product?.name} Materia Prima: ${raw?.code} ${raw?.name}`;
+            const createPromise = ControlModel.Create({data,userId:user.userId,description:descriptionHts});
             if(raw != null) {
                 raw.kg -= Number(kg);
                 raw.gr -= Number(gr);
@@ -122,12 +128,10 @@ class ControlController extends BaseController {
                     name: raw.name
                 } 
 
+                const descriptionRaw = `Actualización de peso de materia prima. Código:${raw.code} Nombre:${raw.name} Antiguo Peso:${kg}.${gr} Nuevo Peso:${raw.kg}.${raw.gr}`;
                 await StaticticsTransaction.conectOrCreate({ name:`${raw.name}`,num:1, type:`Rawmatter` });
-                await RawmatterModel.Update({ id:raw.rawmatterId, data:UpdateRaw });
+                await RawmatterModel.Update({ id:raw.rawmatterId, data:UpdateRaw, userId:user.userId,description:descriptionRaw });
             }
-
-            const machine = await machinePromise;
-            const product = await producPromise;
             
             await StaticticsTransaction.conectOrCreate({ name:`Control`,num:1, type:`Control` });
             await StaticticsTransaction.conectOrCreate({ name:`${machine?.name}`,num:1, type:`Machine` });
@@ -147,7 +151,7 @@ class ControlController extends BaseController {
 
     public async UpdatePost(req: Request, res: Response) {
         try {
-            const user = req.user as UserCompleted;
+            const user = req.user as any;
             const id = req.params.id;
 
             const {
@@ -166,7 +170,16 @@ class ControlController extends BaseController {
                 createId:user.userId,                
             };
 
-            await ControlModel.Update({ id, data });
+            const machinePromise = MachineModel.GetById({ id:data.machineId });
+            const producPromise = ProductModel.GetById({ id:data.productId });
+            const rawmatterPromise = RawmatterModel.GetById({ id:data.rawmatterId });
+            const machine = await machinePromise;
+            const product = await producPromise;
+            const raw = await rawmatterPromise;
+
+            const descriptionHst = `Actualización de control: Fecha:${date} Peso: ${kg}.${gr} Máquina:${machine?.name} Producto: ${product?.name} Materia Prima: ${raw?.code} ${raw?.name}`;
+
+            await ControlModel.Update({ id, data,description:descriptionHst,userId:user.id });
             
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(`/control/list`);

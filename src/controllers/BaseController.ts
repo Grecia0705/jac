@@ -22,7 +22,7 @@ class BaseController {
                 createBy: null,
             }
             
-            const superadminResult = await model.CreateUser({data:superadmin, rol:"ROOT"});
+            const superadminResult = await model.CreateUser({data:superadmin, rol:"ROOT", description:`Creación de usuario por defecto: Correo${superadmin.email} Nombre:${superadmin.name} Apellido:${superadmin.lastname} Usuario:${superadmin.username}`});
 
             listResponse.push(`UserCreate: ${superadminResult.name} ${superadminResult.lastname}`);  
             

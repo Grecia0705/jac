@@ -68,8 +68,9 @@ class MachineController extends BaseController {
             const user = req.user as UserCompleted;
             const {name, description} = req.body;
 
+            const descriptionHts = `Creación de máquina. Nombre: ${name} Descripción: ${description}`;
             const data: MachineCreate = {name,description, createId:user.userId};
-            await MachineModel.Create({data});
+            await MachineModel.Create({data,userId:user.userId,description:descriptionHts});
 
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(`/control/machine`);
@@ -87,8 +88,10 @@ class MachineController extends BaseController {
             const id = req.params.id;
             const {name, description} = req.body;
 
+            const descriptionHts = `Actualización de maquina. Nombre: ${name} Descripción: ${description}`
+
             const data: MachineCreate = {name,description, createId:user.userId};
-            await MachineModel.Update({ id, data });
+            await MachineModel.Update({ id, data,userId:user.userId,description:descriptionHts});
             
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(`/control/machine`);
@@ -102,7 +105,8 @@ class MachineController extends BaseController {
 
     public async AddDeleteAt(req: Request, res: Response) {
         const id = req.params.id;
-        const result = MachineModel.AtDelete({ id });
+        const user = req.user as any;
+        const result = MachineModel.AtDelete({ id, userId:user.userId,description:`Eliminación de maquina.` });
         req.flash(`succ`, `Maquina eliminada`);
         return res.redirect(`/control/machine`);
     }

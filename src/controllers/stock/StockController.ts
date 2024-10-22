@@ -54,7 +54,8 @@ class RawmatterController extends BaseController {
                 price: parseFloat(price), 
                 quantity:Number(quantity)
             };
-            await StockModel.Create({ data });
+            const descriptionHts = `Actualización de Inventario, Descripción:${description} Cantidad:${quantity} Precio:${price}`;
+            await StockModel.Create({ data,description:descriptionHts,userId:user.userId });
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(this.pathView);
 
@@ -70,9 +71,11 @@ class RawmatterController extends BaseController {
             const user = req.user as UserCompleted;
             const id = req.params.id;
             const {description,quantity,price} = req.body;
+            
+            const descriptionHts = `Actualización de Inventario, Descripción:${description} Cantidad:${quantity} Precio:${price}`;
 
             const data: CreateStock = {description, createId:user.userId,price,quantity:Number(quantity)};
-            await StockModel.Update({id,data});
+            await StockModel.Update({id,data,description:descriptionHts,userId:user.userId});
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(`/stock`);
 
@@ -86,7 +89,8 @@ class RawmatterController extends BaseController {
     public async AddDeleteAt(req: Request, res: Response) {
         try {
             const id = req.params.id;
-            const result = StockModel.AtDeleteStock({ id });
+            const user = req.user as any;
+            const result = StockModel.AtDeleteStock({ id,description:`Eliminación de Inventario`,userId:user.id });
             req.flash(`succ`, `Transacción eliminada`);
         } catch (error) {
             console.log(error);

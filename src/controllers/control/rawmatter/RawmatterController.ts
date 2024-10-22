@@ -54,7 +54,8 @@ class RawmatterController extends BaseController {
                 kg: Number(kg),
                 gr: Number(gr)
             };
-            await RawmatterModel.Create({data});
+            const descriptionHts = `Creación de Materia Prima: Nombre:${name} Descripción:${description}`;
+            await RawmatterModel.Create({data,userId:user.userId,description:descriptionHts});
 
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(`/control/rawmatter`);
@@ -77,7 +78,8 @@ class RawmatterController extends BaseController {
                 kg: Number(kg),
                 gr: Number(gr) | 0
             };
-            await RawmatterModel.Update({ id, data });
+            const descriptionHts = `Actualización de materia.  Código:${code} Nombre:${name} Peso:${kg}.${gr}`;
+            await RawmatterModel.Update({ id, data,userId:user.userId,description:descriptionHts });
             
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(`/control/rawmatter`);
@@ -91,7 +93,8 @@ class RawmatterController extends BaseController {
 
     public async AddDeleteAt(req: Request, res: Response) {
         const id = req.params.id;
-        const result = RawmatterModel.AtDelete({ id });
+        const user = req.user as any;
+        const result = RawmatterModel.AtDelete({ id,userId:user.userId,description:`Eliminación de materia prima` });
         req.flash(`succ`, `Maquina eliminada`);
         return res.redirect(`/control/rawmatter/`);
     }

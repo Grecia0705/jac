@@ -7,23 +7,50 @@ class ProductModel extends AbstractModel {
         super();
     }
 
-    public async Create({ data }: {data:ProductCreate}) {
+    public async Create({ data,description,userId }: {data:ProductCreate,description:string,userId: string}) {
         this.StartPrisma();
         const result = await this.prisma.product.create({ data });
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `product`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return result;
     }
 
-    public async Update({ id, data }: {id:string, data:ProductCreate}) {
+    public async Update({ id, data,description,userId }: {id:string, data:ProductCreate,description:string,userId: string}) {
         this.StartPrisma();
         const result = await this.prisma.product.update({ data, where:{productId:id} });
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `product`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return result;
     }
     
-    public async AtDelete({id}:{id:string}) {
+    public async AtDelete({id,description,userId}:{id:string,description:string,userId: string}) {
         this.StartPrisma();
-        await this.prisma.product.update({ data:{delete_at:true}, where:{productId:id} })
+        await this.prisma.product.update({ data:{delete_at:true}, where:{productId:id} });
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `product`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return null
     }

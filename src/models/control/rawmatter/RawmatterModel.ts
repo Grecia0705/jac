@@ -7,9 +7,18 @@ class RawmatterModel extends AbstractModel {
         super();
     }
 
-    public async Create({ data }: {data:RawMatterCreate}) {
+    public async Create({ data,description,userId }: {data:RawMatterCreate,description:string,userId: string}) {
         this.StartPrisma();
         const result = await this.prisma.rawmater.create({ data });
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `product`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return result;
     }
@@ -21,16 +30,34 @@ class RawmatterModel extends AbstractModel {
         return result;
     } 
 
-    public async Update({ id, data }: {id:string, data:RawMatterCreate}) {
+    public async Update({ id, data,description,userId }: {id:string, data:RawMatterCreate,description:string,userId: string}) {
         this.StartPrisma();
         const result = await this.prisma.rawmater.update({ data, where:{rawmatterId:id} });
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `product`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return result;
     }
     
-    public async AtDelete({id}:{id:string}) {
+    public async AtDelete({id,description,userId}:{id:string,description:string,userId: string}) {
         this.StartPrisma();
-        await this.prisma.rawmater.update({ data:{ delete_at:true }, where:{rawmatterId:id} })
+        await this.prisma.rawmater.update({ data:{ delete_at:true }, where:{rawmatterId:id} });
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `product`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return null
     }

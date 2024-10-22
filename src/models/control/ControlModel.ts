@@ -8,7 +8,7 @@ class ControlModel extends AbstractModel {
         super();
     }
 
-    public async Create({ data }: {data:ControlCreate}) {
+    public async Create({ data,description,userId }: {data:ControlCreate, description:string,userId: string}) {
         try {
             console.log(data);
             this.StartPrisma();
@@ -22,7 +22,17 @@ class ControlModel extends AbstractModel {
                     productReference: { connect:{ productId:data.productId } },
                     rawmatterReference: { connect:{ rawmatterId:data.rawmatterId } },
                 }
-            })
+            });
+
+            await this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `control`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return result;
         } catch (error: any) {
@@ -31,7 +41,7 @@ class ControlModel extends AbstractModel {
         }
     }
 
-    public async Update({ id, data }: {id:string, data:ControlCreate}) {
+    public async Update({ id, data,description,userId }: {id:string, data:ControlCreate, description:string,userId: string}) {
         this.StartPrisma();
         const result = await this.prisma.control.update({ data: {
             // createId: data.createId,
@@ -45,6 +55,16 @@ class ControlModel extends AbstractModel {
             rawmatterReference: { connect:{rawmatterId:data.rawmatterId} },
             productReference: { connect:{productId:data.productId} }
         }, where:{controlId:id} });
+
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `control`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return result;
     }

@@ -7,16 +7,34 @@ class StockModel extends AbstractModel {
         super();
     }
 
-    public async Create({ data }: {data:CreateStock}) {
+    public async Create({ data,description,userId }: {data:CreateStock,description:string,userId: string}) {
         this.StartPrisma();
         const result = await this.prisma.stock.create({ data });
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `stock`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return result;
     }
 
-    public async Update({ id, data }: {id:string, data:CreateStock}) {
+    public async Update({ id, data,description,userId }: {id:string, data:CreateStock,description:string,userId: string}) {
         this.StartPrisma();
         const result = await this.prisma.stock.update({ data, where:{stockId:id} });
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `stock`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return result;
     }
@@ -60,9 +78,18 @@ class StockModel extends AbstractModel {
         return result;
     }
 
-    public async AtDeleteStock({id}:{id:string}) {
+    public async AtDeleteStock({id,description,userId}:{id:string,description:string,userId: string}) {
         this.StartPrisma();
-        await this.prisma.stock.update({ data:{ delete_at:true }, where:{stockId:id} })
+        await this.prisma.stock.update({ data:{ delete_at:true }, where:{stockId:id} });
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `stock`,
+            objectReference: true,
+        });
         this.DistroyPrisma();
         return null
     }

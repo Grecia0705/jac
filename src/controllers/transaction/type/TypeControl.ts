@@ -20,8 +20,6 @@ class TypeController extends BaseController {
         const type = TypeModel.GetPaginationType({pag, limit});
         const countPromise = TypeModel.CountTypeAll();
 
-        console.log(type);
-
         const Params = {
             list: await type,
             next: `/transaction/type/?pag=${pag+1}`,
@@ -66,7 +64,8 @@ class TypeController extends BaseController {
                 name,description,
                 createId:user.userId,
             };
-            await TypeModel.CreateType({data});
+            const descriptionHts = `Creación de Tipo, Nombre:${name} Descripción:${description}`;
+            await TypeModel.CreateType({data,description:descriptionHts,userId:user.userId});
 
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(`/transaction/type`);
@@ -82,12 +81,13 @@ class TypeController extends BaseController {
         try {
             const user = req.user as UserCompleted;
             const id = req.params.id;
-            const {name, description,code,kg,gr} = req.body;
+            const {name, description} = req.body;
 
             const data: TypeCreate = {name,description,
                 createId:user.userId,
             };
-            await TypeModel.UpdateType({ id, data });
+            const descriptionHts = `Actualización de Tipo, Nombre:${name} Descripción:${description}`;
+            await TypeModel.UpdateType({ id, data,description:descriptionHts,userId:user.userId });
             
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(`/transaction/type`);
@@ -101,7 +101,8 @@ class TypeController extends BaseController {
 
     public async AddDeleteAt(req: Request, res: Response) {
         const id = req.params.id;
-        const result = TypeModel.AtDeleteType({ id });
+        const user = req.user as any;
+        const result = TypeModel.AtDeleteType({ id,description:`Eliminación de Tipo`,userId:user.userId });
         req.flash(`succ`, `Categoria eliminada`);
         return res.redirect(`/transaction/type/`);
     }

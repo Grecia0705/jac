@@ -54,9 +54,9 @@ class ProductController extends BaseController {
         try {
             const user = req.user as UserCompleted;
             const {name, description} = req.body;
-
+            const descriptionHts = `Creación de Producto: Nombre:${name} Descripción:${description}`; 
             const data: ProductCreate = {name,description, createId:user.userId};
-            await ProductModel.Create({data});
+            await ProductModel.Create({data,userId:user.userId,description:descriptionHts});
 
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(`/control/product`);
@@ -75,7 +75,8 @@ class ProductController extends BaseController {
             const {name, description} = req.body;
 
             const data: ProductCreate = {name,description, createId:user.userId};
-            await ProductModel.Update({ id, data });
+            const descriptionHts = `Actualización de producto: Nombre:${name} Descripción:${description}`;
+            await ProductModel.Update({ id, data,userId:user.userId,description:descriptionHts });
             
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(`/control/product`);
@@ -89,7 +90,8 @@ class ProductController extends BaseController {
 
     public async AddDeleteAt(req: Request, res: Response) {
         const id = req.params.id;
-        const result = ProductModel.AtDelete({ id });
+        const user = req.user as any;
+        const result = ProductModel.AtDelete({ id,userId:user.userId,description:`Eliminación de producto` });
         req.flash(`succ`, `Producto eliminada`);
         return res.redirect(`/control/product`);
     }

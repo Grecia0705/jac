@@ -62,7 +62,8 @@ class CategoryController extends BaseController {
                 name,description,
                 createId:user.userId,
             };
-            await CategoryModel.CreateCategory({data});
+            const descriptionHts = `Actualización de Categoria, Nombre:${name}, Descripción:${description}`;
+            await CategoryModel.CreateCategory({data,description:descriptionHts,userId:user.userId});
 
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(`/transaction/category`);
@@ -78,12 +79,13 @@ class CategoryController extends BaseController {
         try {
             const user = req.user as UserCompleted;
             const id = req.params.id;
-            const {name, description,code,kg,gr} = req.body;
+            const {name, description} = req.body;
 
             const data: CategoryCreate = {name,description,
                 createId:user.userId,
             };
-            await CategoryModel.UpdateCategory({ id, data });
+            const descriptionHts = `Actualización de Categoria, Nombre:${name}, Descripción:${description}`;
+            await CategoryModel.UpdateCategory({ id, data,description:descriptionHts,userId:user.userId });
             
             req.flash(TypesFlash.success, Languaje.messages.success.create)
             return res.redirect(`/transaction/category`);
@@ -97,8 +99,8 @@ class CategoryController extends BaseController {
 
     public async AddDeleteAt(req: Request, res: Response) {
         const id = req.params.id;
-        console.log(req.params);
-        const result = CategoryModel.AtDeleteCategory({ id });
+        const user = req.user as any;
+        const result = CategoryModel.AtDeleteCategory({ id,description:`Eliminación de Cateogria`,userId:user.userId });
         req.flash(`succ`, `Categoria eliminada`);
         return res.redirect(`/transaction/category/`);
     }

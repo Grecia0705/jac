@@ -109,8 +109,10 @@ class UserController extends BaseController {
                 password: await UserModel.HashPassword({ password: req.body.password }),
                 username: req.body.username
             } 
+
             
-            await UserModel.CreateUser({ data: NewUser });
+            const descriptionHts = `Creación de Usuario, Nombre:${NewUser.name} Apellido:${NewUser.lastname} Correo:${NewUser.email} Usuario:${NewUser.username}`;
+            await UserModel.CreateUser({ data: NewUser,description:descriptionHts });
             req.flash(`succ`, `Usuario creado.`);
             return res.redirect(`/user/list`);
 

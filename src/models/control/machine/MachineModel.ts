@@ -7,23 +7,56 @@ class MachineModel extends AbstractModel {
         super();
     }
 
-    public async Create({ data }: {data:MachineCreate}) {
+    public async Create({ data,description,userId }: {data:MachineCreate, description:string, userId: string}) {
         this.StartPrisma();
         const result = await this.prisma.machine.create({ data });
         this.DistroyPrisma();
+
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `machine`,
+            objectReference: true,
+        });
+
         return result;
     }
 
-    public async Update({ id, data }: {id:string, data:MachineCreate}) {
+    public async Update({ id, data, description,userId }: {id:string, data:MachineCreate, description:string, userId: string}) {
         this.StartPrisma();
         const result = await this.prisma.machine.update({ data, where:{machineId:id} });
+
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `machine`,
+            objectReference: true,
+        });
+
         this.DistroyPrisma();
         return result;
     }
     
-    public async AtDelete({id}:{id:string}) {
+    public async AtDelete({id,description,userId}:{id:string,description:string, userId: string}) {
         this.StartPrisma();
-        await this.prisma.machine.update({ data:{ delete_at:true }, where:{machineId:id} })
+        await this.prisma.machine.update({ data:{ delete_at:true }, where:{machineId:id} });
+
+        await this.CreateHistory({
+            description,
+            userReference: {
+                connect: { userId: userId }
+            },
+            objectId: userId,
+            objectName: `machine`,
+            objectReference: true,
+        });
+
         this.DistroyPrisma();
         return null
     }
