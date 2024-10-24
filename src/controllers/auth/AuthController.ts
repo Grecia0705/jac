@@ -6,8 +6,6 @@ import passport from "passport";
 class AuthController extends BaseController {
 
     public async LoginRender(req: Request, res: Response) {
-        // const result = await StockModel.StaticticsAll({});
-        // console.log(result);
         return res.render(`p/login.hbs`);
     }
 

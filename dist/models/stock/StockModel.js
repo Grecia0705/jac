@@ -18,17 +18,35 @@ class StockModel extends BaseModel_1.default {
         super();
     }
     Create(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ data }) {
+        return __awaiter(this, arguments, void 0, function* ({ data, description, userId }) {
             this.StartPrisma();
             const result = yield this.prisma.stock.create({ data });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `stock`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return result;
         });
     }
     Update(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ id, data }) {
+        return __awaiter(this, arguments, void 0, function* ({ id, data, description, userId }) {
             this.StartPrisma();
             const result = yield this.prisma.stock.update({ data, where: { stockId: id } });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `stock`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return result;
         });
@@ -75,9 +93,18 @@ class StockModel extends BaseModel_1.default {
         });
     }
     AtDeleteStock(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ id }) {
+        return __awaiter(this, arguments, void 0, function* ({ id, description, userId }) {
             this.StartPrisma();
             yield this.prisma.stock.update({ data: { delete_at: true }, where: { stockId: id } });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `stock`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return null;
         });

@@ -6,8 +6,7 @@
     <div class="row d-flex justify-content-between mb-2">
         <span></span>
         <div class="">
-            <a href="/users" class="btn btn-primary">panel</a>
-            <a href="/user/create" class="btn btn-primary">crear</a>
+            <a href="/" class="btn btn-primary">panel</a>
         </div>
     </div>
     <div class="row">
@@ -16,25 +15,26 @@
                 <table class="table table-hover table-light table-bordered mb-4">
                     <thead>
                         <tr>
-                            <th>Nombre</th>
-                            <th>Usuario</th>
+                            <th>Objecto</th>
+                            <th>ID?</th>
                             <th>Creado el</th>
+                            <th>Creado por</th>
                             <th class="text-center">acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {{#each list}}
                             <tr>
-                                <td>{{this.name}} {{this.lastname}}</td>
-                                <td>{{this.username}}</td>
+                                <td>{{this.objectName}}</td>
+                                <td>{{this.objectId}}</td>
                                 <td>
-                                    {{#formatDate this.create_at}}
+                                    {{#formatDate this.createAt}}
                                         {{this}}
                                     {{/formatDate}}
                                 </td>
+                                <td><a href="/user/{{this.userReference.userId/show}}" class="btn btn-primary btn-sm">{{this.userReference.name}} {{this.userReference.lastname}}</a></td>
                                 <td>
-                                    <a href="/user/{{this.userId}}/update" class="bi bi-eye-fill lead btn btn-primary">
-                                    </a>
+                                    {{this.description}}
                                 </td>
                             </tr>
                         {{/each}}

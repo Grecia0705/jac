@@ -60,8 +60,9 @@ class ProductController extends BaseController_1.default {
             try {
                 const user = req.user;
                 const { name, description } = req.body;
+                const descriptionHts = `Creación de Producto: Nombre:${name} Descripción:${description}`;
                 const data = { name, description, createId: user.userId };
-                yield ProductModel_1.default.Create({ data });
+                yield ProductModel_1.default.Create({ data, userId: user.userId, description: descriptionHts });
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(`/control/product`);
             }
@@ -79,7 +80,8 @@ class ProductController extends BaseController_1.default {
                 const id = req.params.id;
                 const { name, description } = req.body;
                 const data = { name, description, createId: user.userId };
-                yield ProductModel_1.default.Update({ id, data });
+                const descriptionHts = `Actualización de producto: Nombre:${name} Descripción:${description}`;
+                yield ProductModel_1.default.Update({ id, data, userId: user.userId, description: descriptionHts });
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(`/control/product`);
             }
@@ -93,7 +95,8 @@ class ProductController extends BaseController_1.default {
     AddDeleteAt(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id;
-            const result = ProductModel_1.default.AtDelete({ id });
+            const user = req.user;
+            const result = ProductModel_1.default.AtDelete({ id, userId: user.userId, description: `Eliminación de producto` });
             req.flash(`succ`, `Producto eliminada`);
             return res.redirect(`/control/product`);
         });

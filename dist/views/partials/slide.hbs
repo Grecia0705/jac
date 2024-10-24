@@ -23,6 +23,7 @@
                 </ul>
             </li>   
 
+            {{#validRoot user.rol}}
             <li class="menu">
                 <a href="#user" data-active="true" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
                     <p class="">
@@ -42,6 +43,7 @@
                     </li>
                 </ul>
             </li>
+            {{/validRoot}}
 
             <li class="menu">
                 <a href="#stock" data-active="true" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
@@ -103,15 +105,18 @@
                     <li>
                         <a href="/transaction"> Movimientos </a>
                     </li>
+                    {{#validRoot user.rol}}
                     <li>
                         <a href="/transaction/category"> Categorias </a>
                     </li>
                     <li>
                         <a href="/transaction/type"> Tipos </a>
                     </li>
+                    {{/validRoot}}
                 </ul>
             </li>
 
+            {{#validRoot user.rol}}
             <li class="menu">
                 <a href="#report" data-active="true" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
                     <p class="">
@@ -131,6 +136,7 @@
                     </li>
                 </ul>
             </li>
+            {{/validRoot}}
 
         </ul>     
     </nav>

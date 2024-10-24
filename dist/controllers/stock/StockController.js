@@ -59,12 +59,12 @@ class RawmatterController extends BaseController_1.default {
             try {
                 const user = req.user;
                 const { description, quantity, price } = req.body;
-                console.log(price);
                 const data = { description, createId: user.userId,
                     price: parseFloat(price),
                     quantity: Number(quantity)
                 };
-                yield StockModel_1.default.Create({ data });
+                const descriptionHts = `Actualización de Inventario, Descripción:${description} Cantidad:${quantity} Precio:${price}`;
+                yield StockModel_1.default.Create({ data, description: descriptionHts, userId: user.userId });
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(this.pathView);
             }
@@ -81,8 +81,9 @@ class RawmatterController extends BaseController_1.default {
                 const user = req.user;
                 const id = req.params.id;
                 const { description, quantity, price } = req.body;
+                const descriptionHts = `Actualización de Inventario, Descripción:${description} Cantidad:${quantity} Precio:${price}`;
                 const data = { description, createId: user.userId, price, quantity: Number(quantity) };
-                yield StockModel_1.default.Update({ id, data });
+                yield StockModel_1.default.Update({ id, data, description: descriptionHts, userId: user.userId });
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(`/stock`);
             }
@@ -97,7 +98,8 @@ class RawmatterController extends BaseController_1.default {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const id = req.params.id;
-                const result = StockModel_1.default.AtDeleteStock({ id });
+                const user = req.user;
+                const result = StockModel_1.default.AtDeleteStock({ id, description: `Eliminación de Inventario`, userId: user.id });
                 req.flash(`succ`, `Transacción eliminada`);
             }
             catch (error) {

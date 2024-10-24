@@ -23,6 +23,7 @@
                 </ul>
             </li>   
 
+            {{#validRoot user.rol}}
             <li class="menu">
                 <a href="#user" data-active="true" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
                     <p class="">
@@ -42,6 +43,7 @@
                     </li>
                 </ul>
             </li>
+            {{/validRoot}}
 
             <li class="menu">
                 <a href="#stock" data-active="true" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
@@ -103,15 +105,18 @@
                     <li>
                         <a href="/transaction"> Movimientos </a>
                     </li>
+                    {{#validRoot user.rol}}
                     <li>
                         <a href="/transaction/category"> Categorias </a>
                     </li>
                     <li>
                         <a href="/transaction/type"> Tipos </a>
                     </li>
+                    {{/validRoot}}
                 </ul>
             </li>
 
+            {{#validRoot user.rol}}
             <li class="menu">
                 <a href="#report" data-active="true" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
                     <p class="">
@@ -131,6 +136,18 @@
                     </li>
                 </ul>
             </li>
+            <li class="menu"></li>
+                <a href="/history" data-active="true" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                    <p class="">
+                        <i class="lead bi bi-list"></i>
+                        <strong>Historial</strong>
+                    </p>
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </div>
+                </a>
+            </li>
+            {{/validRoot}}
 
         </ul>     
     </nav>

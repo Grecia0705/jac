@@ -18,17 +18,35 @@ class TypeModel extends TransactionModel_1.default {
         super();
     }
     CreateType(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ data }) {
+        return __awaiter(this, arguments, void 0, function* ({ data, description, userId }) {
             this.StartPrisma();
             const result = this.prisma.transactionType.create({ data });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `transaction.type`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return result;
         });
     }
     UpdateType(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ data, id }) {
+        return __awaiter(this, arguments, void 0, function* ({ data, id, description, userId }) {
             this.StartPrisma();
             const result = this.prisma.transactionType.update({ data, where: { transactionTypeId: id } });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `transaction.type`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return result;
         });
@@ -71,9 +89,18 @@ class TypeModel extends TransactionModel_1.default {
         });
     }
     AtDeleteType(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ id }) {
+        return __awaiter(this, arguments, void 0, function* ({ id, description, userId }) {
             this.StartPrisma();
             this.prisma.transactionType.update({ data: { delete_at: true }, where: { transactionTypeId: id } });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `transaction.type`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return null;
         });

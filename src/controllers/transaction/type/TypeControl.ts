@@ -51,7 +51,6 @@ class TypeController extends BaseController {
         const Params = {
             data: await data
         }
-        console.log(Params.data);
         return res.render(`s/transaction/type/update.hbs`, Params)
     }
 

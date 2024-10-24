@@ -2,7 +2,6 @@ import bcryptjs from "bcrypt";
 
 export const encryptPassword = async (password: string) => {
     const hash = await bcryptjs.hash(password, 11);
-    console.log(hash);
     return hash;
 };
 

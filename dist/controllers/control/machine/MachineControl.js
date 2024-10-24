@@ -70,8 +70,9 @@ class MachineController extends BaseController_1.default {
             try {
                 const user = req.user;
                 const { name, description } = req.body;
+                const descriptionHts = `Creación de máquina. Nombre: ${name} Descripción: ${description}`;
                 const data = { name, description, createId: user.userId };
-                yield MachineModel_1.default.Create({ data });
+                yield MachineModel_1.default.Create({ data, userId: user.userId, description: descriptionHts });
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(`/control/machine`);
             }
@@ -88,8 +89,9 @@ class MachineController extends BaseController_1.default {
                 const user = req.user;
                 const id = req.params.id;
                 const { name, description } = req.body;
+                const descriptionHts = `Actualización de maquina. Nombre: ${name} Descripción: ${description}`;
                 const data = { name, description, createId: user.userId };
-                yield MachineModel_1.default.Update({ id, data });
+                yield MachineModel_1.default.Update({ id, data, userId: user.userId, description: descriptionHts });
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(`/control/machine`);
             }
@@ -103,7 +105,8 @@ class MachineController extends BaseController_1.default {
     AddDeleteAt(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id;
-            const result = MachineModel_1.default.AtDelete({ id });
+            const user = req.user;
+            const result = MachineModel_1.default.AtDelete({ id, userId: user.userId, description: `Eliminación de maquina.` });
             req.flash(`succ`, `Maquina eliminada`);
             return res.redirect(`/control/machine`);
         });

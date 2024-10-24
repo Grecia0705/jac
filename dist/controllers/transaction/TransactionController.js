@@ -82,7 +82,10 @@ class TransactionController extends BaseController_1.default {
                     typeId,
                     createId: user.userId,
                 };
-                yield TransactionModel.Create({ data });
+                const categoryModel = yield CategoryModel_1.default.GetCategoryById({ id: categoryId });
+                const type = yield TypeModel_1.default.GetTypeById({ id: typeId });
+                const descriptionHts = `Creación de Movimiento, Fecha:${date} Monto:${mount} Descripción:${description} Categoria:${categoryModel === null || categoryModel === void 0 ? void 0 : categoryModel.name} Tipo:${type === null || type === void 0 ? void 0 : type.name}`;
+                yield TransactionModel.Create({ data, description: descriptionHts, userId: user.userId });
                 const category = yield categoryPromise;
                 // console.log(category?.name, data.mount);
                 yield StaticticsTransaction_1.default.conectOrCreate({ name: `${category === null || category === void 0 ? void 0 : category.name}`, num: data.mount });
@@ -111,7 +114,10 @@ class TransactionController extends BaseController_1.default {
                     typeId,
                     createId: user.userId,
                 };
-                yield TransactionModel.Update({ id, data });
+                const category = yield CategoryModel_1.default.GetCategoryById({ id: categoryId });
+                const type = yield TypeModel_1.default.GetTypeById({ id: typeId });
+                const descriptionHts = `Actualización de Movimiento, Fecha:${date} Monto:${mount} Descripción:${description} Categoria:${category === null || category === void 0 ? void 0 : category.name} Tipo:${type === null || type === void 0 ? void 0 : type.name}`;
+                yield TransactionModel.Update({ id, data, description: descriptionHts, userId: user.userId });
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(`/transaction`);
             }
@@ -125,7 +131,8 @@ class TransactionController extends BaseController_1.default {
     AddDeleteAt(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id;
-            const result = TransactionModel.AtDeleteTransaction({ id });
+            const user = req.user;
+            const result = TransactionModel.AtDeleteTransaction({ id, description: `Eliminación de Transacción`, userId: user.userId });
             req.flash(`succ`, `Transacción eliminada`);
             return res.redirect(`/transaction`);
         });

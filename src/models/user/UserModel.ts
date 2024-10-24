@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { UserCreate } from "../../type/user.d";
 import AbstractModel from "../BaseModel";
 
@@ -97,9 +98,9 @@ class UserModel extends AbstractModel {
     }
 
     // actualiza usuario por id
-    public async UpdateUser() {
+    public async UpdateUser({ data,where }:{ data:Prisma.UserUpdateInput, where:Prisma.UserWhereUniqueInput }) {
         this.StartPrisma();
-        
+        return await this.prisma.user.update({ data, where })
         this.DistroyPrisma();
     }
 

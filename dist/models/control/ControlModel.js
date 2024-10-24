@@ -18,19 +18,29 @@ class ControlModel extends BaseModel_1.default {
         super();
     }
     Create(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ data }) {
+        return __awaiter(this, arguments, void 0, function* ({ data, description, userId }) {
             try {
+                console.log(data);
                 this.StartPrisma();
                 const result = yield this.prisma.control.create({
                     data: {
-                        createId: data.createId,
                         date: data.date,
                         gr: data.gr,
                         kg: data.kg,
-                        machineId: data.machineId,
-                        productId: data.productId,
-                        rawmatterId: data.rawmatterId
+                        createReference: { connect: { userId: data.createId } },
+                        machineReference: { connect: { machineId: data.machineId } },
+                        productReference: { connect: { productId: data.productId } },
+                        rawmatterReference: { connect: { rawmatterId: data.rawmatterId } },
                     }
+                });
+                yield this.CreateHistory({
+                    description,
+                    userReference: {
+                        connect: { userId: userId }
+                    },
+                    objectId: userId,
+                    objectName: `control`,
+                    objectReference: true,
                 });
                 this.DistroyPrisma();
                 return result;
@@ -42,7 +52,7 @@ class ControlModel extends BaseModel_1.default {
         });
     }
     Update(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ id, data }) {
+        return __awaiter(this, arguments, void 0, function* ({ id, data, description, userId }) {
             this.StartPrisma();
             const result = yield this.prisma.control.update({ data: {
                     // createId: data.createId,
@@ -56,6 +66,15 @@ class ControlModel extends BaseModel_1.default {
                     rawmatterReference: { connect: { rawmatterId: data.rawmatterId } },
                     productReference: { connect: { productId: data.productId } }
                 }, where: { controlId: id } });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `control`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return result;
         });

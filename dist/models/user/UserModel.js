@@ -38,7 +38,7 @@ class UserModel extends BaseModel_1.default {
     }
     // crea usuario
     CreateUser(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ data, rol }) {
+        return __awaiter(this, arguments, void 0, function* ({ data, rol, description }) {
             this.StartPrisma();
             const result = yield this.prisma.user.create({
                 data: {
@@ -49,6 +49,15 @@ class UserModel extends BaseModel_1.default {
                     username: data.username,
                     rol: rol ? rol : `ADMIN`
                 }
+            });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: result.userId }
+                },
+                objectId: result.userId,
+                objectName: `user`,
+                objectReference: true,
             });
             this.DistroyPrisma();
             // this.StaticticsUpdate({});
@@ -100,17 +109,27 @@ class UserModel extends BaseModel_1.default {
         });
     }
     // actualiza usuario por id
-    UpdateUser() {
-        return __awaiter(this, void 0, void 0, function* () {
+    UpdateUser(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ data, where }) {
             this.StartPrisma();
+            return yield this.prisma.user.update({ data, where });
             this.DistroyPrisma();
         });
     }
     // agrega eliminación de uaurio
     AtDeleteUser(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ id }) {
+        return __awaiter(this, arguments, void 0, function* ({ id, description }) {
             this.StartPrisma();
             yield this.prisma.user.update({ data: { delete_at: true }, where: { userId: id } });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: id }
+                },
+                objectId: id,
+                objectName: `user`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return null;
         });

@@ -16,7 +16,6 @@ exports.matchPassword = exports.encryptPassword = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const encryptPassword = (password) => __awaiter(void 0, void 0, void 0, function* () {
     const hash = yield bcrypt_1.default.hash(password, 11);
-    console.log(hash);
     return hash;
 });
 exports.encryptPassword = encryptPassword;

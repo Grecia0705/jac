@@ -28,7 +28,6 @@ class BaseController {
             
             return res.status(200).json({body:listResponse});
         } catch (error) {
-            console.log(error);
             return res.status(500).json({ok:false});   
         }
     }
@@ -43,6 +42,12 @@ class BaseController {
 
 
     }
+
+    public async Logout(req: Request, res: Response) {
+        req.logOut(() => {
+            return res.redirect(`/`);
+        })
+    }    
 }
 
 export default BaseController;

@@ -26,7 +26,6 @@ class TypeController extends BaseController_1.default {
             const limit = req.query.limit | 10;
             const type = TypeModel_1.default.GetPaginationType({ pag, limit });
             const countPromise = TypeModel_1.default.CountTypeAll();
-            console.log(type);
             const Params = {
                 list: yield type,
                 next: `/transaction/type/?pag=${pag + 1}`,
@@ -57,7 +56,6 @@ class TypeController extends BaseController_1.default {
             const Params = {
                 data: yield data
             };
-            console.log(Params.data);
             return res.render(`s/transaction/type/update.hbs`, Params);
         });
     }
@@ -70,7 +68,8 @@ class TypeController extends BaseController_1.default {
                     name, description,
                     createId: user.userId,
                 };
-                yield TypeModel_1.default.CreateType({ data });
+                const descriptionHts = `Creación de Tipo, Nombre:${name} Descripción:${description}`;
+                yield TypeModel_1.default.CreateType({ data, description: descriptionHts, userId: user.userId });
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(`/transaction/type`);
             }
@@ -86,11 +85,12 @@ class TypeController extends BaseController_1.default {
             try {
                 const user = req.user;
                 const id = req.params.id;
-                const { name, description, code, kg, gr } = req.body;
+                const { name, description } = req.body;
                 const data = { name, description,
                     createId: user.userId,
                 };
-                yield TypeModel_1.default.UpdateType({ id, data });
+                const descriptionHts = `Actualización de Tipo, Nombre:${name} Descripción:${description}`;
+                yield TypeModel_1.default.UpdateType({ id, data, description: descriptionHts, userId: user.userId });
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(`/transaction/type`);
             }
@@ -104,7 +104,8 @@ class TypeController extends BaseController_1.default {
     AddDeleteAt(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id;
-            const result = TypeModel_1.default.AtDeleteType({ id });
+            const user = req.user;
+            const result = TypeModel_1.default.AtDeleteType({ id, description: `Eliminación de Tipo`, userId: user.userId });
             req.flash(`succ`, `Categoria eliminada`);
             return res.redirect(`/transaction/type/`);
         });

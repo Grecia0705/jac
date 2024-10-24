@@ -18,25 +18,52 @@ class ProductModel extends BaseModel_1.default {
         super();
     }
     Create(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ data }) {
+        return __awaiter(this, arguments, void 0, function* ({ data, description, userId }) {
             this.StartPrisma();
             const result = yield this.prisma.product.create({ data });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `product`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return result;
         });
     }
     Update(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ id, data }) {
+        return __awaiter(this, arguments, void 0, function* ({ id, data, description, userId }) {
             this.StartPrisma();
             const result = yield this.prisma.product.update({ data, where: { productId: id } });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `product`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return result;
         });
     }
     AtDelete(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ id }) {
+        return __awaiter(this, arguments, void 0, function* ({ id, description, userId }) {
             this.StartPrisma();
             yield this.prisma.product.update({ data: { delete_at: true }, where: { productId: id } });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `product`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return null;
         });

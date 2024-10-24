@@ -18,7 +18,7 @@ class TransactionModel extends BaseModel_1.default {
         super();
     }
     Create(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ data }) {
+        return __awaiter(this, arguments, void 0, function* ({ data, description, userId }) {
             this.StartPrisma();
             const result = this.prisma.transaction.create({
                 data: {
@@ -30,14 +30,32 @@ class TransactionModel extends BaseModel_1.default {
                     typeReference: { connect: { transactionTypeId: data.typeId } },
                 }
             });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `transaction`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return result;
         });
     }
     Update(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ data, id }) {
+        return __awaiter(this, arguments, void 0, function* ({ data, id, description, userId }) {
             this.StartPrisma();
             const result = this.prisma.transaction.update({ data, where: { transactionId: id } });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `transaction`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return result;
         });
@@ -90,9 +108,18 @@ class TransactionModel extends BaseModel_1.default {
         });
     }
     AtDeleteTransaction(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ id }) {
+        return __awaiter(this, arguments, void 0, function* ({ id, description, userId }) {
             this.StartPrisma();
             this.prisma.transaction.update({ data: { delete_at: true }, where: { transactionId: id } });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `transaction`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return null;
         });

@@ -17,8 +17,6 @@ const passport_1 = __importDefault(require("passport"));
 class AuthController extends BaseController_1.default {
     LoginRender(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            // const result = await StockModel.StaticticsAll({});
-            // console.log(result);
             return res.render(`p/login.hbs`);
         });
     }

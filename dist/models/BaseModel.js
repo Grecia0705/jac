@@ -26,5 +26,33 @@ class AbstractModel {
             this.prisma.$disconnect();
         });
     }
+    CreateHistory(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.StartPrisma();
+            return this.prisma.history.create({ data });
+        });
+    }
+    PaginationHostory(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ filter, pag, limit }) {
+            return yield this.prisma.history.findMany({
+                where: filter,
+                skip: pag * 10,
+                take: limit,
+                include: {
+                    userReference: true
+                },
+                orderBy: {
+                    createAt: 'asc'
+                }
+            });
+        });
+    }
+    CountHostory(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ filter }) {
+            return yield this.prisma.history.count({
+                where: filter
+            });
+        });
+    }
 }
 exports.default = AbstractModel;

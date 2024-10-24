@@ -60,7 +60,8 @@ class RawmatterController extends BaseController_1.default {
                     kg: Number(kg),
                     gr: Number(gr)
                 };
-                yield RawmatterModel_1.default.Create({ data });
+                const descriptionHts = `Creación de Materia Prima: Nombre:${name} Descripción:${description}`;
+                yield RawmatterModel_1.default.Create({ data, userId: user.userId, description: descriptionHts });
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(`/control/rawmatter`);
             }
@@ -82,7 +83,8 @@ class RawmatterController extends BaseController_1.default {
                     kg: Number(kg),
                     gr: Number(gr) | 0
                 };
-                yield RawmatterModel_1.default.Update({ id, data });
+                const descriptionHts = `Actualización de materia.  Código:${code} Nombre:${name} Peso:${kg}.${gr}`;
+                yield RawmatterModel_1.default.Update({ id, data, userId: user.userId, description: descriptionHts });
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(`/control/rawmatter`);
             }
@@ -96,7 +98,8 @@ class RawmatterController extends BaseController_1.default {
     AddDeleteAt(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id;
-            const result = RawmatterModel_1.default.AtDelete({ id });
+            const user = req.user;
+            const result = RawmatterModel_1.default.AtDelete({ id, userId: user.userId, description: `Eliminación de materia prima` });
             req.flash(`succ`, `Maquina eliminada`);
             return res.redirect(`/control/rawmatter/`);
         });

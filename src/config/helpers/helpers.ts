@@ -4,15 +4,18 @@ const Helpers = {
     ifeq(path: string, page: string, options: any) {
 
         if (path === page) {
-            console.log(this);
             return options.fn(`bello`);
           }
         return options.inverse(`no bello`);
     },
     
-    validRoot(userRol: string, options: any) {
+    validRoot(userRol: any, options: any) {
         const toRetunr = userRol == `ROOT` ? options.fn(true) : options.inverse(false);
-        console.log(toRetunr);
+        return toRetunr;
+    },
+
+    equal(id1: string, id2: string, options: any) {
+        const toRetunr = id1 == id2 ? options.fn(true) : options.inverse(false);
         return toRetunr;
     },
 

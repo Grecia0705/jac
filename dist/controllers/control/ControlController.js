@@ -77,7 +77,6 @@ class ControlController extends BaseController_1.default {
             const Params = {
                 data: yield data
             };
-            console.log(Params);
             return res.render(`s/control/update.hbs`, Params);
         });
     }
@@ -97,9 +96,12 @@ class ControlController extends BaseController_1.default {
                 };
                 const machinePromise = MachineModel_1.default.GetById({ id: data.machineId });
                 const producPromise = ProductModel_1.default.GetById({ id: data.productId });
-                // const rawmatterPromise = RawmatterModel.GetById({ id:data.rawmatterId });
-                const createPromise = ControlModel_1.default.Create({ data });
+                const machine = yield machinePromise;
+                const product = yield producPromise;
                 const raw = yield RawmatterModel_1.default.GetById({ id: data.rawmatterId });
+                // const rawmatterPromise = RawmatterModel.GetById({ id:data.rawmatterId });
+                const descriptionHts = `Creación de Control: Fecha:${data} PESO:${kg}.${gr} Máquina:${machine === null || machine === void 0 ? void 0 : machine.name} Producto: ${product === null || product === void 0 ? void 0 : product.name} Materia Prima: ${raw === null || raw === void 0 ? void 0 : raw.code} ${raw === null || raw === void 0 ? void 0 : raw.name}`;
+                const createPromise = ControlModel_1.default.Create({ data, userId: user.userId, description: descriptionHts });
                 if (raw != null) {
                     raw.kg -= Number(kg);
                     raw.gr -= Number(gr);
@@ -111,11 +113,10 @@ class ControlController extends BaseController_1.default {
                         kg: raw.gr,
                         name: raw.name
                     };
+                    const descriptionRaw = `Actualización de peso de materia prima. Código:${raw.code} Nombre:${raw.name} Antiguo Peso:${kg}.${gr} Nuevo Peso:${raw.kg}.${raw.gr}`;
                     yield StaticticsTransaction_1.default.conectOrCreate({ name: `${raw.name}`, num: 1, type: `Rawmatter` });
-                    yield RawmatterModel_1.default.Update({ id: raw.rawmatterId, data: UpdateRaw });
+                    yield RawmatterModel_1.default.Update({ id: raw.rawmatterId, data: UpdateRaw, userId: user.userId, description: descriptionRaw });
                 }
-                const machine = yield machinePromise;
-                const product = yield producPromise;
                 yield StaticticsTransaction_1.default.conectOrCreate({ name: `Control`, num: 1, type: `Control` });
                 yield StaticticsTransaction_1.default.conectOrCreate({ name: `${machine === null || machine === void 0 ? void 0 : machine.name}`, num: 1, type: `Machine` });
                 yield StaticticsTransaction_1.default.conectOrCreate({ name: `${product === null || product === void 0 ? void 0 : product.name}`, num: 1, type: `Product` });
@@ -145,7 +146,14 @@ class ControlController extends BaseController_1.default {
                     rawmatterId,
                     createId: user.userId,
                 };
-                yield ControlModel_1.default.Update({ id, data });
+                const machinePromise = MachineModel_1.default.GetById({ id: data.machineId });
+                const producPromise = ProductModel_1.default.GetById({ id: data.productId });
+                const rawmatterPromise = RawmatterModel_1.default.GetById({ id: data.rawmatterId });
+                const machine = yield machinePromise;
+                const product = yield producPromise;
+                const raw = yield rawmatterPromise;
+                const descriptionHst = `Actualización de control: Fecha:${date} Peso: ${kg}.${gr} Máquina:${machine === null || machine === void 0 ? void 0 : machine.name} Producto: ${product === null || product === void 0 ? void 0 : product.name} Materia Prima: ${raw === null || raw === void 0 ? void 0 : raw.code} ${raw === null || raw === void 0 ? void 0 : raw.name}`;
+                yield ControlModel_1.default.Update({ id, data, description: descriptionHst, userId: user.id });
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(`/control/list`);
             }

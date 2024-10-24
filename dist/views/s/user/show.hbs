@@ -25,28 +25,29 @@
             </div>
         </div>
 
-        {{!-- <div class="col-xl-8 col-lg-6 col-md-5 col-sm-12 layout-top-spacing">
+        {{#equal data.userId user.userId}}
+        <div class="col-xl-8 col-lg-6 col-md-5 col-sm-12 layout-top-spacing">
             <div class="card">
-                <form method="post" action="/user/create" class="form-row card-body">
+                <form method="post" action="/user/{{../data.userId}}/update" class="form-row card-body">
 
                     <div class="form-group col-12 col-lg-6">
                         <label for="t-name" class="">Nombre:</label>
-                        <input id="t-name" type="text" value="{{data.name}}" name="name" class="form-control" required>
+                        <input id="t-name" type="text" value="{{../data.name}}" name="name" class="form-control" required>
                     </div>  
 
                     <div class="form-group col-12 col-lg-6">
                         <label for="t-lastname" class="">Apellido:</label>
-                        <input id="t-lastname" type="text" value="{{data.lastname}}" name="lastname" class="form-control" required>
+                        <input id="t-lastname" type="text" value="{{../data.lastname}}" name="lastname" class="form-control" required>
                     </div>  
 
                     <div class="form-group col-12 col-lg-6">
                         <label for="t-email" class="">Correo:</label>
-                        <input id="t-email" type="email" value="{{data.email}}" name="email" class="form-control" required>
+                        <input id="t-email" type="email" value="{{../data.email}}" name="email" class="form-control" required>
                     </div>  
 
                     <div class="form-group col-12 col-lg-6">
                         <label for="t-username" class="">Usuario:</label>
-                        <input id="t-username" type="text" value="{{data.username}}" name="username" class="form-control" required>
+                        <input id="t-username" type="text" value="{{../data.username}}" name="username" class="form-control" required>
                     </div>  
 
                     <div class="form-group col-12 col-lg-6">
@@ -59,6 +60,7 @@
                     </div>
                 </form>
             </div>
-        </div> --}}
+        </div>
+        {{/equal}}
     </div>
 </div>

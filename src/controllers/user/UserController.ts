@@ -3,13 +3,16 @@ import BaseController from "../BaseController";
 import UserModel from "../../models/user/UserModel";
 import TransactionModel from "../../models/transacction/TransactionModel";
 import MachineModel from "../../models/control/machine/MachineModel";
+// import MachineModel from "../../models/";
 import ProductModel from "../../models/control/product/ProductModel";
 import RawmatterModel from "../../models/control/rawmatter/RawmatterModel";
 import ControlModel from "../../models/control/ControlModel";
 import { UserCompleted, UserCreate } from "../../type/user";
 import { OnSession } from "../../middleware/auth";
+import { Prisma } from "@prisma/client";
 
 class UserController extends BaseController {
+
     public async DashboardController (req: Request, res: Response) {
 
         const user = UserModel.CountBy({ filter:{} });
@@ -20,7 +23,7 @@ class UserController extends BaseController {
 
         return res.render(`s/dashboard.hbs`, {
             ubication: `Resumen`,
-            user: await user,
+            userCount: await user,
             machine: await machine,
             product: await product,
             rawmatter: await rawmatter,
@@ -45,6 +48,35 @@ class UserController extends BaseController {
         }
 
         return res.render(`s/user/dashboard.hbs`, Params);        
+    }
+
+    // render list
+    public async RenderListHistory(req: Request, res: Response) {
+        const pag = req.params.pag | 0;
+        const limit = req.params.limit | 10; 
+
+        const users = UserModel.PaginationHostory({filter:{}, limit, pag});
+        const countPromise = UserModel.CountHostory({ filter:{} });
+
+        const Params = {
+            list: await users,
+            next: `/history/list?pag=${pag+1}`,
+            previous: pag == 0 ? null : `/history/list?pag=${pag-1}`,
+            count: await countPromise,
+
+            nowTotal: ``,
+            requirePagination: false,
+            nowPath: pag,
+            nowPathOne: pag!=0 ? true : false,
+            nowPathEnd: false,
+        }
+
+        Params.nowTotal = `${Params.list.length+(pag*10)} / ${Params.count}`;
+        Params.nowPathEnd = (Params.list.length-9)>0 ? true : false;
+        
+        Params.requirePagination = Params.count > 10 ? true : false;
+
+        return res.render(`s/history.hbs`, Params);     
     }
 
     // render list
@@ -101,7 +133,7 @@ class UserController extends BaseController {
     public async CreateUserPost(req: Request, res: Response) {
         try {
             const user = req.user as UserCompleted;
-            const NewUser: UserCreate = {
+            const current: UserCreate = {
                 createBy: user.userId,
                 email: req.body.email,
                 lastname: req.body.lastname,
@@ -111,8 +143,8 @@ class UserController extends BaseController {
             } 
 
             
-            const descriptionHts = `Creación de Usuario, Nombre:${NewUser.name} Apellido:${NewUser.lastname} Correo:${NewUser.email} Usuario:${NewUser.username}`;
-            await UserModel.CreateUser({ data: NewUser,description:descriptionHts });
+            const descriptionHts = `Creación de Usuario, Nombre:${current.name} Apellido:${current.lastname} Correo:${current.email} Usuario:${current.username}`;
+            await UserModel.CreateUser({ data: current,description:descriptionHts });
             req.flash(`succ`, `Usuario creado.`);
             return res.redirect(`/user/list`);
 
@@ -123,14 +155,42 @@ class UserController extends BaseController {
         }
     }
 
+    // logic register
+    public async UpdateUserPost(req: any, res: Response) {
+        try {
+            const id = req.user.id as string;
+            const user = req.user as UserCompleted;
+            const current: Prisma.UserUpdateInput = {
+                email: req.body.email,
+                lastname: req.body.lastname,
+                name: req.body.name,
+                password: await UserModel.HashPassword({ password: req.body.password }),
+                username: req.body.username
+            } 
+
+            
+            const descriptionHts = `Actualización de Usuario, Nombre:${current.name} Apellido:${current.lastname} Correo:${current.email} Usuario:${current.username}`;
+            await UserModel.UpdateUser({ data: current, where:{ userId:id } });
+            req.flash(`succ`, `Usuario actualizado.`);
+            return res.redirect(`/user/list`);
+
+        } catch (error) {
+            console.log(error);
+            req.flash(`err`, `No se pudo actualizar el usuario.`);
+            return res.redirect(`/user/list`);
+        }
+    }
+
     public LoadRouters() {
         this.router.get(`/dashboard`, OnSession, this.DashboardController);
         this.router.get(`/statictics`, OnSession, this.StaticticsController);
         this.router.get(`/user`, OnSession, this.RenderDashboard);
+        this.router.get(`/history`, OnSession, this.RenderListHistory);
         this.router.get(`/user/list`, OnSession, this.RenderList);
         this.router.get(`/user/create`, OnSession, this.RenderCreate);
         this.router.get(`/user/:id/update`, OnSession, this.RenderShow);
         this.router.post(`/user/create`, OnSession, this.CreateUserPost);
+        this.router.post(`/user/:id/update`, OnSession, this.UpdateUserPost);
 
         return this.router;
     }

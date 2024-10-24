@@ -68,7 +68,8 @@ class CategoryController extends BaseController_1.default {
                     name, description,
                     createId: user.userId,
                 };
-                yield CategoryModel_1.default.CreateCategory({ data });
+                const descriptionHts = `Actualización de Categoria, Nombre:${name}, Descripción:${description}`;
+                yield CategoryModel_1.default.CreateCategory({ data, description: descriptionHts, userId: user.userId });
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(`/transaction/category`);
             }
@@ -84,11 +85,12 @@ class CategoryController extends BaseController_1.default {
             try {
                 const user = req.user;
                 const id = req.params.id;
-                const { name, description, code, kg, gr } = req.body;
+                const { name, description } = req.body;
                 const data = { name, description,
                     createId: user.userId,
                 };
-                yield CategoryModel_1.default.UpdateCategory({ id, data });
+                const descriptionHts = `Actualización de Categoria, Nombre:${name}, Descripción:${description}`;
+                yield CategoryModel_1.default.UpdateCategory({ id, data, description: descriptionHts, userId: user.userId });
                 req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
                 return res.redirect(`/transaction/category`);
             }
@@ -102,8 +104,8 @@ class CategoryController extends BaseController_1.default {
     AddDeleteAt(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id;
-            console.log(req.params);
-            const result = CategoryModel_1.default.AtDeleteCategory({ id });
+            const user = req.user;
+            const result = CategoryModel_1.default.AtDeleteCategory({ id, description: `Eliminación de Cateogria`, userId: user.userId });
             req.flash(`succ`, `Categoria eliminada`);
             return res.redirect(`/transaction/category/`);
         });

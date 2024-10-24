@@ -79,7 +79,6 @@ class ControlController extends BaseController {
         const Params = {
             data: await data
         }
-        console.log(Params);
         return res.render(`s/control/update.hbs`, Params)
     }
 

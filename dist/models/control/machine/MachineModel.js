@@ -18,25 +18,52 @@ class MachineModel extends BaseModel_1.default {
         super();
     }
     Create(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ data }) {
+        return __awaiter(this, arguments, void 0, function* ({ data, description, userId }) {
             this.StartPrisma();
             const result = yield this.prisma.machine.create({ data });
             this.DistroyPrisma();
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `machine`,
+                objectReference: true,
+            });
             return result;
         });
     }
     Update(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ id, data }) {
+        return __awaiter(this, arguments, void 0, function* ({ id, data, description, userId }) {
             this.StartPrisma();
             const result = yield this.prisma.machine.update({ data, where: { machineId: id } });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `machine`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return result;
         });
     }
     AtDelete(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ id }) {
+        return __awaiter(this, arguments, void 0, function* ({ id, description, userId }) {
             this.StartPrisma();
             yield this.prisma.machine.update({ data: { delete_at: true }, where: { machineId: id } });
+            yield this.CreateHistory({
+                description,
+                userReference: {
+                    connect: { userId: userId }
+                },
+                objectId: userId,
+                objectName: `machine`,
+                objectReference: true,
+            });
             this.DistroyPrisma();
             return null;
         });

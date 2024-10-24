@@ -86,6 +86,7 @@ app.use(TransactionType.LoadRoutes());
 app.use(TransactionCategory.LoadRoutes());
 app.use(Transaction.LoadRoutes());
 app.get(`/start/app/user`, User.InsertUserBase);
+app.get(`/logout`, User.Logout);
 
 // Static Files
 console.log(path.join(__dirname, "../public"));

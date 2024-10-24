@@ -33,12 +33,11 @@ class BaseController {
                     username: `superadmin`,
                     createBy: null,
                 };
-                const superadminResult = yield model.CreateUser({ data: superadmin, rol: "ROOT" });
+                const superadminResult = yield model.CreateUser({ data: superadmin, rol: "ROOT", description: `Creación de usuario por defecto: Correo${superadmin.email} Nombre:${superadmin.name} Apellido:${superadmin.lastname} Usuario:${superadmin.username}` });
                 listResponse.push(`UserCreate: ${superadminResult.name} ${superadminResult.lastname}`);
                 return res.status(200).json({ body: listResponse });
             }
             catch (error) {
-                console.log(error);
                 return res.status(500).json({ ok: false });
             }
         });
@@ -49,6 +48,13 @@ class BaseController {
             const year = date.getFullYear();
             // const result = await UserModel.CreateStatictisForYear({ year });
             // return res.json({ body:result });
+        });
+    }
+    Logout(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            req.logOut(() => {
+                return res.redirect(`/`);
+            });
         });
     }
 }

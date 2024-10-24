@@ -24,6 +24,26 @@ class AbstractModel {
         return this.prisma.history.create({ data });
     }
 
+    async PaginationHostory({ filter,pag,limit }: { filter:Prisma.HistoryWhereInput, pag:number, limit:number }) {
+        return await this.prisma.history.findMany({
+            where: filter,
+            skip: pag*10,
+            take: limit,
+            include: {
+                userReference: true
+            },
+            orderBy: {
+                createAt: 'asc'
+            }
+        })
+    }
+
+    async CountHostory({ filter }: { filter:Prisma.HistoryWhereInput }) {
+        return await this.prisma.history.count({
+            where: filter
+        })
+    }
+
     // async CreateTransaction({data}: {data: TransactionCreate}) {
     //     this.StartPrisma();
     //     const result = await this.prisma.$transaction.create({data});

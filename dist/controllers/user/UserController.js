@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const BaseController_1 = __importDefault(require("../BaseController"));
 const UserModel_1 = __importDefault(require("../../models/user/UserModel"));
 const MachineModel_1 = __importDefault(require("../../models/control/machine/MachineModel"));
+// import MachineModel from "../../models/";
 const ProductModel_1 = __importDefault(require("../../models/control/product/ProductModel"));
 const RawmatterModel_1 = __importDefault(require("../../models/control/rawmatter/RawmatterModel"));
 const ControlModel_1 = __importDefault(require("../../models/control/ControlModel"));
@@ -29,7 +30,7 @@ class UserController extends BaseController_1.default {
             const control = ControlModel_1.default.CountAll();
             return res.render(`s/dashboard.hbs`, {
                 ubication: `Resumen`,
-                user: yield user,
+                userCount: yield user,
                 machine: yield machine,
                 product: yield product,
                 rawmatter: yield rawmatter,
@@ -52,6 +53,30 @@ class UserController extends BaseController_1.default {
                 count: yield countPromise
             };
             return res.render(`s/user/dashboard.hbs`, Params);
+        });
+    }
+    // render list
+    RenderListHistory(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const pag = req.params.pag | 0;
+            const limit = req.params.limit | 10;
+            const users = UserModel_1.default.PaginationHostory({ filter: {}, limit, pag });
+            const countPromise = UserModel_1.default.CountHostory({ filter: {} });
+            const Params = {
+                list: yield users,
+                next: `/history/list?pag=${pag + 1}`,
+                previous: pag == 0 ? null : `/history/list?pag=${pag - 1}`,
+                count: yield countPromise,
+                nowTotal: ``,
+                requirePagination: false,
+                nowPath: pag,
+                nowPathOne: pag != 0 ? true : false,
+                nowPathEnd: false,
+            };
+            Params.nowTotal = `${Params.list.length + (pag * 10)} / ${Params.count}`;
+            Params.nowPathEnd = (Params.list.length - 9) > 0 ? true : false;
+            Params.requirePagination = Params.count > 10 ? true : false;
+            return res.render(`s/history.hbs`, Params);
         });
     }
     // render list
@@ -103,7 +128,7 @@ class UserController extends BaseController_1.default {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const user = req.user;
-                const NewUser = {
+                const current = {
                     createBy: user.userId,
                     email: req.body.email,
                     lastname: req.body.lastname,
@@ -111,7 +136,8 @@ class UserController extends BaseController_1.default {
                     password: yield UserModel_1.default.HashPassword({ password: req.body.password }),
                     username: req.body.username
                 };
-                yield UserModel_1.default.CreateUser({ data: NewUser });
+                const descriptionHts = `Creación de Usuario, Nombre:${current.name} Apellido:${current.lastname} Correo:${current.email} Usuario:${current.username}`;
+                yield UserModel_1.default.CreateUser({ data: current, description: descriptionHts });
                 req.flash(`succ`, `Usuario creado.`);
                 return res.redirect(`/user/list`);
             }
@@ -122,14 +148,41 @@ class UserController extends BaseController_1.default {
             }
         });
     }
+    // logic register
+    UpdateUserPost(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const id = req.user.id;
+                const user = req.user;
+                const current = {
+                    email: req.body.email,
+                    lastname: req.body.lastname,
+                    name: req.body.name,
+                    password: yield UserModel_1.default.HashPassword({ password: req.body.password }),
+                    username: req.body.username
+                };
+                const descriptionHts = `Actualización de Usuario, Nombre:${current.name} Apellido:${current.lastname} Correo:${current.email} Usuario:${current.username}`;
+                yield UserModel_1.default.UpdateUser({ data: current, where: { userId: id } });
+                req.flash(`succ`, `Usuario actualizado.`);
+                return res.redirect(`/user/list`);
+            }
+            catch (error) {
+                console.log(error);
+                req.flash(`err`, `No se pudo actualizar el usuario.`);
+                return res.redirect(`/user/list`);
+            }
+        });
+    }
     LoadRouters() {
         this.router.get(`/dashboard`, auth_1.OnSession, this.DashboardController);
         this.router.get(`/statictics`, auth_1.OnSession, this.StaticticsController);
         this.router.get(`/user`, auth_1.OnSession, this.RenderDashboard);
+        this.router.get(`/history`, auth_1.OnSession, this.RenderListHistory);
         this.router.get(`/user/list`, auth_1.OnSession, this.RenderList);
         this.router.get(`/user/create`, auth_1.OnSession, this.RenderCreate);
         this.router.get(`/user/:id/update`, auth_1.OnSession, this.RenderShow);
         this.router.post(`/user/create`, auth_1.OnSession, this.CreateUserPost);
+        this.router.post(`/user/:id/update`, auth_1.OnSession, this.UpdateUserPost);
         return this.router;
     }
 }

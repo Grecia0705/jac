@@ -49,7 +49,6 @@ class RawmatterController extends BaseController {
             const user = req.user as UserCompleted;
             const {description,quantity,price} = req.body;
 
-            console.log(price);
             const data: CreateStock = {description, createId:user.userId, 
                 price: parseFloat(price), 
                 quantity:Number(quantity)
