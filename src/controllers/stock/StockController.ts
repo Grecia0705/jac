@@ -53,14 +53,16 @@ class RawmatterController extends BaseController {
                 price: parseFloat(price), 
                 quantity:Number(quantity)
             };
-            const descriptionHts = `Actualización de Inventario, Descripción:${description} Cantidad:${quantity} Precio:${price}`;
+            const descriptionHts = `Creación de inventario de Inventario, Descripción:${description} Cantidad:${quantity} Precio:${price}`;
             await StockModel.Create({ data,description:descriptionHts,userId:user.userId });
-            req.flash(TypesFlash.success, Languaje.messages.success.create)
-            return res.redirect(this.pathView);
+            req.flash(`succ`, `Creación exitosa.`);
+            console.log(req.flash);
+            return res.redirect(`/stock`);
 
         } catch (error) {
+            console.log(`# # # # # # # # # # # # #`)
             console.log(error);
-            req.flash(TypesFlash.error, Languaje.messages.danger.create)
+            req.flash(`err`, `Error al crear.`)
             return res.redirect(`/stock`);
         }
     }
@@ -89,7 +91,8 @@ class RawmatterController extends BaseController {
         try {
             const id = req.params.id;
             const user = req.user as any;
-            const result = StockModel.AtDeleteStock({ id,description:`Eliminación de Inventario`,userId:user.id });
+            console.log(user)
+            const result = StockModel.AtDeleteStock({ id,description:`Eliminación de Inventario`,userId:user.userId });
             req.flash(`succ`, `Transacción eliminada`);
         } catch (error) {
             console.log(error);

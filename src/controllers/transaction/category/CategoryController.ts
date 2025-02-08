@@ -21,19 +21,19 @@ class CategoryController extends BaseController {
 
         const Params = {
             list: await machine,
-            next: `/machine/?pag=${pag+1}`,
-            previous: pag == 0 ? null : `/machine/?pag=${pag-1}`,
+            next: `/transaction/category/?pag=${pag+1}`,
+            previous: pag == 0 ? null : `/transaction/category/?pag=${pag-1}`,
             count: await countPromise,
 
             nowTotal: ``,
             requirePagination: false,
             nowPath: pag,
-            nowPathOne: pag!=0 ? true : false,
+            nowPathOne: pag !=0 ? true : false,
             nowPathEnd: false,
         }
 
         Params.nowTotal = `${Params.list.length+(pag*10)} / ${Params.count}`;
-        Params.nowPathEnd = (Params.list.length-9)>0 ? true : false;
+        Params.nowPathEnd = Params.list.length < Params.count ? true : false;
         
         Params.requirePagination = Params.count > 10 ? true : false;
         return res.render(`s/transaction/category/list.hbs`, Params)

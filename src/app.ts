@@ -92,7 +92,7 @@ app.get(`/logout`, User.Logout);
 console.log(path.join(__dirname, "../public"));
 app.use(express.static(path.join(__dirname, "../public")));
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8181;
 
 // Init Express
 app.listen(

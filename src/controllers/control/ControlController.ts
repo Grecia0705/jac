@@ -94,15 +94,13 @@ class ControlController extends BaseController {
 
             const data: ControlCreate = {
                 date,
-                gr: parseInt(gr),
-                kg: parseInt(kg),
+                gr: Number(gr),
+                kg: Number(kg),
                 machineId,
                 productId,
                 rawmatterId,
                 createId:user.userId,                
             };
-
-            
 
             const machinePromise = MachineModel.GetById({ id:data.machineId });
             const producPromise = ProductModel.GetById({ id:data.productId });
@@ -115,15 +113,17 @@ class ControlController extends BaseController {
             const descriptionHts = `Creación de Control: Fecha:${data} PESO:${kg}.${gr} Máquina:${machine?.name} Producto: ${product?.name} Materia Prima: ${raw?.code} ${raw?.name}`;
             const createPromise = ControlModel.Create({data,userId:user.userId,description:descriptionHts});
             if(raw != null) {
-                raw.kg -= Number(kg);
-                raw.gr -= Number(gr);
+
+                console.log(`prev`, raw.kg, raw.gr);
+                console.log(`control`, data.kg, data.gr);
+                console.log(`now`, raw.kg - data.kg, raw.gr - data.gr);
 
                 const UpdateRaw:RawMatterCreate = {
                     code: raw.code,
                     createId: raw.createId,
                     description: raw.description ? raw.description : ``,
-                    gr: raw.gr,
-                    kg: raw.gr,
+                    gr: Number(raw.gr) - Number(data.gr),
+                    kg: Number(raw.gr) - Number(data.kg),
                     name: raw.name
                 } 
 

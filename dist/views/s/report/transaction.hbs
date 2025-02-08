@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <form action="/report/transaction" method="GET" class="col-12 card">
+        <form action="/report/transaction/file" target="_blank" method="GET" class="col-12 card">
             <div class="card-body">
 
                 <label class="w-100">
@@ -52,17 +52,5 @@
         </form>
     </div>
 
-    {{#if file}}
-        <h4 class="mt-4">Filtros</h4>
-        <ul>
-            <li>Resutlados: {{count}}</li>
-            {{#each filter}}
-                <li>{{this}}</li>
-            {{/each}}
-        </ul>
-        <div class="row mt-3">
-            <a href="{{file.download}}" target="_blank" class="btn btn-danger">Descargar reporte</a>
-        </div>
-    {{/if}}
 
 </div>

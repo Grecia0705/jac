@@ -2,15 +2,28 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/forms/theme-checkbox-radio.css">
 <link rel="stylesheet" type="text/css" href="/assets/css/forms/switches.css">
 
-<div class="form">
+
+<style>
+    .bg-login {
+        background-image: url("/logo.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 80%;
+    }
+</style>
+
+
+<div class="form bg-login">
     <div class="form-container outer">
         <div class="form-form">
             <div class="form-form-wrap">
                 <div class="form-container">
-                    <div class="form-content">
-                        <h1 class="">Iniciar sesión</h1>
+                    <div class="form-content d-grid" style="grid-template-columns: 1fr 1fr;">
+
+                        
                         
                         <form class="text-left" method="POST" action="/login">
+                            <h1 class="">Iniciar sesión</h1>
                             <div class="form">
 
                                 <div id="email-field" class="field-wrapper input">

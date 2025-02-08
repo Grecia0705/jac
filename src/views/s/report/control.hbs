@@ -1,7 +1,12 @@
 <div class="container">
     <div class="row">
-        <form action="/report/control" method="GET" class="col-12 card">
+        <form action="/report/control/file" target="_blank" method="GET" class="col-12 card">
             <div class="card-body">
+
+                <label class="w-100">
+                    <span>Fecha</span>
+                    <input type="date" name="date" class="form-control w-full" />
+                </label>
 
                 {{!-- <label class="w-100">
                     <span>Mes</span>
@@ -56,33 +61,5 @@
             </div>            
         </form>
     </div>
-
-
-{{#if filter}}
-    <div class="row mt-3">
-        <h4 class="col-12">Filtros</h4>
-        {{#each filter}}
-            <div class="card col-12 col-md-4 col-lg-3">
-                <div class="card-body pt-1 pb-0">
-                    <p class="h6 text-center" style="font-weight: 900;">{{this.key}}</p>
-                    <p class="h3 text-center" style="font-weight: 900;font-family: monospace ;color:#414549">{{this.value}}</p>
-                </div>
-            </div>
-        {{/each}}
-    </div>
-{{/if}}
-
- {{#if file}}
-    <h4 class="mt-4">Filtros</h4>
-    <ul>
-        <li>Resutlados: {{count}}</li>
-        {{#each filter}}
-            <li>{{this}}</li>
-        {{/each}}
-    </ul>
-    <div class="row mt-3">
-        <a href="{{file.download}}" target="_blank" class="btn btn-danger">Descargar reporte</a>
-    </div>
-{{/if}}
 
 </div>

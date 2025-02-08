@@ -58,14 +58,14 @@ class UserController extends BaseController_1.default {
     // render list
     RenderListHistory(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const pag = req.params.pag | 0;
-            const limit = req.params.limit | 10;
+            const pag = req.query.pag | 0;
+            const limit = req.query.limit | 10;
             const users = UserModel_1.default.PaginationHostory({ filter: {}, limit, pag });
             const countPromise = UserModel_1.default.CountHostory({ filter: {} });
             const Params = {
                 list: yield users,
-                next: `/history/list?pag=${pag + 1}`,
-                previous: pag == 0 ? null : `/history/list?pag=${pag - 1}`,
+                next: `/history/?pag=${pag + 1}`,
+                previous: pag == 0 ? null : `/history/?pag=${pag - 1}`,
                 count: yield countPromise,
                 nowTotal: ``,
                 requirePagination: false,

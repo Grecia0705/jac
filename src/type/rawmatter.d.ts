@@ -9,6 +9,7 @@ export interface RawMatterCreate {
     gr: number,
 }
 
+
 export interface RawMatterCompleted extends RawMatterCreate {
     rawmatterId: string,
     createReference: UserCompleted,

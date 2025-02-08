@@ -87,8 +87,8 @@ class ControlController extends BaseController_1.default {
                 const { machineId, productId, rawmatterId, date, kg, gr, } = req.body;
                 const data = {
                     date,
-                    gr: parseInt(gr),
-                    kg: parseInt(kg),
+                    gr: Number(gr),
+                    kg: Number(kg),
                     machineId,
                     productId,
                     rawmatterId,
@@ -103,14 +103,15 @@ class ControlController extends BaseController_1.default {
                 const descriptionHts = `Creación de Control: Fecha:${data} PESO:${kg}.${gr} Máquina:${machine === null || machine === void 0 ? void 0 : machine.name} Producto: ${product === null || product === void 0 ? void 0 : product.name} Materia Prima: ${raw === null || raw === void 0 ? void 0 : raw.code} ${raw === null || raw === void 0 ? void 0 : raw.name}`;
                 const createPromise = ControlModel_1.default.Create({ data, userId: user.userId, description: descriptionHts });
                 if (raw != null) {
-                    raw.kg -= Number(kg);
-                    raw.gr -= Number(gr);
+                    console.log(`prev`, raw.kg, raw.gr);
+                    console.log(`control`, data.kg, data.gr);
+                    console.log(`now`, raw.kg - data.kg, raw.gr - data.gr);
                     const UpdateRaw = {
                         code: raw.code,
                         createId: raw.createId,
                         description: raw.description ? raw.description : ``,
-                        gr: raw.gr,
-                        kg: raw.gr,
+                        gr: Number(raw.gr) - Number(data.gr),
+                        kg: Number(raw.gr) - Number(data.kg),
                         name: raw.name
                     };
                     const descriptionRaw = `Actualización de peso de materia prima. Código:${raw.code} Nombre:${raw.name} Antiguo Peso:${kg}.${gr} Nuevo Peso:${raw.kg}.${raw.gr}`;

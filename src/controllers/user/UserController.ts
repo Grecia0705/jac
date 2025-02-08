@@ -52,16 +52,16 @@ class UserController extends BaseController {
 
     // render list
     public async RenderListHistory(req: Request, res: Response) {
-        const pag = req.params.pag | 0;
-        const limit = req.params.limit | 10; 
+        const pag = req.query.pag | 0;
+        const limit = req.query.limit | 10; 
 
         const users = UserModel.PaginationHostory({filter:{}, limit, pag});
         const countPromise = UserModel.CountHostory({ filter:{} });
 
         const Params = {
             list: await users,
-            next: `/history/list?pag=${pag+1}`,
-            previous: pag == 0 ? null : `/history/list?pag=${pag-1}`,
+            next: `/history/?pag=${pag+1}`,
+            previous: pag == 0 ? null : `/history/?pag=${pag-1}`,
             count: await countPromise,
 
             nowTotal: ``,

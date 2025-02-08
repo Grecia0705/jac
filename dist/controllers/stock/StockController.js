@@ -63,14 +63,16 @@ class RawmatterController extends BaseController_1.default {
                     price: parseFloat(price),
                     quantity: Number(quantity)
                 };
-                const descriptionHts = `Actualización de Inventario, Descripción:${description} Cantidad:${quantity} Precio:${price}`;
+                const descriptionHts = `Creación de inventario de Inventario, Descripción:${description} Cantidad:${quantity} Precio:${price}`;
                 yield StockModel_1.default.Create({ data, description: descriptionHts, userId: user.userId });
-                req.flash(var_1.TypesFlash.success, var_1.Languaje.messages.success.create);
-                return res.redirect(this.pathView);
+                req.flash(`succ`, `Creación exitosa.`);
+                console.log(req.flash);
+                return res.redirect(`/stock`);
             }
             catch (error) {
+                console.log(`# # # # # # # # # # # # #`);
                 console.log(error);
-                req.flash(var_1.TypesFlash.error, var_1.Languaje.messages.danger.create);
+                req.flash(`err`, `Error al crear.`);
                 return res.redirect(`/stock`);
             }
         });
@@ -99,7 +101,8 @@ class RawmatterController extends BaseController_1.default {
             try {
                 const id = req.params.id;
                 const user = req.user;
-                const result = StockModel_1.default.AtDeleteStock({ id, description: `Eliminación de Inventario`, userId: user.id });
+                console.log(user);
+                const result = StockModel_1.default.AtDeleteStock({ id, description: `Eliminación de Inventario`, userId: user.userId });
                 req.flash(`succ`, `Transacción eliminada`);
             }
             catch (error) {
